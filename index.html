@@ -6,210 +6,230 @@
 <title>Rescue Challenge — Project Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #D92B2B; --red-dark: #A01E1E; --red-light: #FAE8E8;
-    --ink: #0F0F0F; --ink2: #2A2A2A; --ink3: #555; --ink4: #888;
-    --paper: #F7F5F0; --paper2: #EDEBE4; --white: #FFFFFF; --border: #D8D4CB;
-    --green: #1A7A4A; --green-light: #E3F5EC; --amber: #C47B00; --amber-light: #FDF3DC;
-    --blue: #1A5FA0; --blue-light: #E3EEFA; --purple: #6B3FA0; --purple-light: #F0E8FA;
-    --sidebar-w: 260px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); overflow-x: hidden; }
+:root {
+  --red:#D92B2B;--red-dark:#A01E1E;--red-light:#FAE8E8;
+  --ink:#0F0F0F;--ink2:#2A2A2A;--ink3:#555;--ink4:#888;
+  --paper:#F7F5F0;--paper2:#EDEBE4;--white:#FFFFFF;--border:#D8D4CB;
+  --green:#1A7A4A;--green-light:#E3F5EC;--amber:#C47B00;--amber-light:#FDF3DC;
+  --blue:#1A5FA0;--blue-light:#E3EEFA;--purple:#6B3FA0;--purple-light:#F0E8FA;
+  --sidebar-w:260px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden;}
 
-  /* ── LOGIN ── */
-  #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--ink); padding: 20px; }
-  .login-box { background: var(--white); border-radius: 16px; padding: 40px 44px; width: 100%; max-width: 380px; box-shadow: 0 24px 80px rgba(0,0,0,0.4); }
-  .login-logo-tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--red); text-transform: uppercase; margin-bottom: 6px; }
-  .login-logo { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--ink); margin-bottom: 28px; line-height: 1.1; }
-  .login-label { font-size: 12px; color: var(--ink3); margin-bottom: 6px; font-weight: 500; }
-  .login-input { width: 100%; padding: 10px 14px; border: 0.5px solid var(--border); border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; margin-bottom: 16px; background: var(--paper); color: var(--ink); outline: none; transition: border 0.15s; }
-  .login-input:focus { border-color: var(--red); background: var(--white); }
-  .login-btn { width: 100%; padding: 12px; background: var(--red); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s; }
-  .login-btn:hover { background: var(--red-dark); }
-  .login-error { font-size: 12px; color: var(--red); margin-top: 10px; text-align: center; min-height: 18px; }
-  .login-hint { margin-top: 16px; font-size: 11px; color: var(--ink4); text-align: center; line-height: 1.8; }
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px;}
+.login-box{background:var(--white);border-radius:16px;padding:40px 44px;width:100%;max-width:380px;box-shadow:0 24px 80px rgba(0,0,0,0.4);}
+.login-logo-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--red);text-transform:uppercase;margin-bottom:6px;}
+.login-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:28px;line-height:1.1;}
+.login-input{width:100%;padding:10px 14px;border:.5px solid var(--border);border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;margin-bottom:16px;background:var(--paper);color:var(--ink);outline:none;transition:border .15s;}
+.login-input:focus{border-color:var(--red);background:var(--white);}
+.login-btn{width:100%;padding:12px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.login-btn:hover{background:var(--red-dark);}
+.login-error{font-size:12px;color:var(--red);margin-top:10px;text-align:center;min-height:18px;}
+.login-hint{margin-top:16px;font-size:11px;color:var(--ink4);text-align:center;line-height:1.8;}
 
-  /* ── APP SHELL ── */
-  #app { display: none; height: 100vh; overflow: hidden; }
-  #app.visible { display: flex; flex-direction: row; }
+/* APP */
+#app{display:none;height:100vh;overflow:hidden;}
+#app.visible{display:flex;flex-direction:row;}
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
 
-  /* ── SIDEBAR ── */
-  .sidebar {
-    width: var(--sidebar-w); min-width: var(--sidebar-w);
-    background: var(--ink); display: flex; flex-direction: column;
-    height: 100vh; overflow-y: auto; transition: transform 0.3s ease; z-index: 200;
-  }
-  .sidebar-logo { padding: 20px 20px 16px; border-bottom: 0.5px solid #2a2a2a; }
-  .logo-tag { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: var(--red); text-transform: uppercase; margin-bottom: 4px; }
-  .logo-name { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; color: #fff; line-height: 1.1; }
-  .logo-sub { font-size: 11px; color: #555; margin-top: 3px; }
-  .sidebar-section { padding: 14px 12px 6px; }
-  .sidebar-section-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; color: #444; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
-  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #888; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; }
-  .nav-item:hover { background: #1a1a1a; color: #fff; }
-  .nav-item.active { background: var(--red); color: #fff; }
-  .nav-icon { font-size: 15px; min-width: 18px; }
-  .nav-badge { margin-left: auto; background: #2a2a2a; color: #666; font-size: 10px; padding: 1px 6px; border-radius: 10px; font-family: 'DM Mono', monospace; }
-  .nav-item.active .nav-badge { background: rgba(255,255,255,0.2); color: #fff; }
-  .sidebar-divider { height: 0.5px; background: #1e1e1e; margin: 8px 12px; }
-  .sidebar-user { padding: 14px 20px; border-top: 0.5px solid #1e1e1e; margin-top: auto; }
-  .user-name { font-size: 13px; font-weight: 500; color: #ccc; }
-  .user-role { font-size: 11px; color: #555; margin-bottom: 8px; }
-  .logout-btn { font-size: 11px; color: #555; cursor: pointer; border: none; background: none; font-family: 'DM Sans', sans-serif; padding: 0; }
-  .logout-btn:hover { color: var(--red); }
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--ink);display:flex;flex-direction:column;height:100vh;overflow-y:auto;transition:transform .3s;z-index:200;}
+.sidebar-logo{padding:20px 20px 16px;border-bottom:.5px solid #2a2a2a;}
+.logo-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--red);text-transform:uppercase;margin-bottom:4px;}
+.logo-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1.1;}
+.logo-sub{font-size:11px;color:#555;margin-top:3px;}
+.sidebar-section{padding:14px 12px 6px;}
+.sidebar-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:#444;text-transform:uppercase;padding:0 8px;margin-bottom:4px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer;font-size:13px;color:#888;transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+.nav-item:hover{background:#1a1a1a;color:#fff;}
+.nav-item.active{background:var(--red);color:#fff;}
+.nav-icon{font-size:15px;min-width:18px;}
+.nav-badge{margin-left:auto;background:#2a2a2a;color:#666;font-size:10px;padding:1px 6px;border-radius:10px;font-family:'DM Mono',monospace;}
+.nav-item.active .nav-badge{background:rgba(255,255,255,.2);color:#fff;}
+.sidebar-divider{height:.5px;background:#1e1e1e;margin:8px 12px;}
+.sidebar-user{padding:14px 20px;border-top:.5px solid #1e1e1e;margin-top:auto;}
+.user-name{font-size:13px;font-weight:500;color:#ccc;}
+.user-role{font-size:11px;color:#555;margin-bottom:8px;}
+.logout-btn{font-size:11px;color:#555;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif;padding:0;}
+.logout-btn:hover{color:var(--red);}
 
-  /* ── OVERLAY (mobile) ── */
-  #sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 150; }
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{height:56px;background:var(--white);border-bottom:.5px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;}
+.topbar-menu-btn{display:none;border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink);padding:4px 6px;border-radius:6px;}
+.topbar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:.08em;white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:.5px solid var(--border);background:var(--white);color:var(--ink2);transition:all .15s;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.btn:hover{background:var(--paper2);}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red-dark);}
+.btn-red:hover{background:var(--red-dark);}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.content{flex:1;overflow-y:auto;padding:24px;background:var(--paper);}
+.page{display:none;}
+.page.active{display:block;}
 
-  /* ── MAIN ── */
-  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-  .topbar { height: 56px; background: var(--white); border-bottom: 0.5px solid var(--border); display: flex; align-items: center; padding: 0 20px; gap: 12px; flex-shrink: 0; }
-  .topbar-menu-btn { display: none; border: none; background: none; font-size: 20px; cursor: pointer; color: var(--ink); padding: 4px 6px; border-radius: 6px; }
-  .topbar-menu-btn:hover { background: var(--paper2); }
-  .topbar-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .topbar-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink4); letter-spacing: 0.08em; white-space: nowrap; }
-  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border); background: var(--white); color: var(--ink2); transition: all 0.15s; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
-  .btn:hover { background: var(--paper2); }
-  .btn-red { background: var(--red); color: #fff; border-color: var(--red-dark); }
-  .btn-red:hover { background: var(--red-dark); }
-  .content { flex: 1; overflow-y: auto; padding: 24px; background: var(--paper); }
-  .page { display: none; }
-  .page.active { display: block; }
+/* COMPONENTS */
+.section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:.5px;background:var(--border);}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.kpi{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:16px 18px;}
+.kpi-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;line-height:1;}
+.kpi-sub{font-size:11px;color:var(--ink4);margin-top:5px;}
+.progress-bar{height:4px;background:var(--paper2);border-radius:2px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:100%;border-radius:2px;}
+.card-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.task-card{background:var(--white);border:.5px solid var(--border);border-radius:8px;padding:12px 14px;transition:all .15s;margin-bottom:8px;}
+.task-card:hover{border-color:var(--ink4);}
+.task-title{font-size:13px;font-weight:500;margin-bottom:6px;line-height:1.4;}
+.task-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'DM Mono',monospace;}
+.tag-gara{background:var(--red-light);color:var(--red-dark);}
+.tag-logistica{background:var(--blue-light);color:var(--blue);}
+.tag-sponsor{background:var(--amber-light);color:var(--amber);}
+.tag-comunicazione{background:var(--purple-light);color:var(--purple);}
+.tag-sicurezza{background:var(--green-light);color:var(--green);}
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.kanban-col{background:var(--paper2);border-radius:10px;padding:14px;min-height:200px;}
+.kanban-col-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;font-weight:500;color:var(--ink2);}
+.col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.col-count{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);}
+.ideas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.idea-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:16px 18px;}
+.idea-cat{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.idea-title{font-size:14px;font-weight:500;margin-bottom:6px;}
+.idea-desc{font-size:12px;color:var(--ink3);line-height:1.6;}
+.idea-footer{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:10px;border-top:.5px solid var(--border);}
+.data-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);border-radius:10px;overflow:hidden;border:.5px solid var(--border);}
+.data-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);text-align:left;padding:10px 14px;border-bottom:.5px solid var(--border);background:var(--paper2);}
+.data-table td{padding:10px 14px;border-bottom:.5px solid var(--border);vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--paper);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s;padding:16px;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--white);border-radius:14px;padding:28px 32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:500;color:var(--ink3);margin-bottom:5px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;border:.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);outline:none;transition:border .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--red);background:var(--white);}
+.form-textarea{resize:vertical;min-height:70px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.add-card{border:.5px dashed var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;text-align:center;font-size:12px;color:var(--ink4);transition:all .15s;background:none;width:100%;font-family:'DM Sans',sans-serif;}
+.add-card:hover{border-color:var(--red);color:var(--red);background:var(--red-light);}
+.mini-select{font-size:10px;border:.5px solid var(--border);border-radius:6px;padding:2px 6px;background:var(--paper);cursor:pointer;font-family:'DM Sans',sans-serif;}
+.icon-btn{font-size:12px;border:none;background:none;cursor:pointer;color:var(--ink4);padding:2px 4px;}
+.icon-btn:hover{color:var(--red);}
+.loading{text-align:center;padding:40px;color:var(--ink4);font-size:13px;}
+.empty-state{text-align:center;padding:40px;color:var(--ink4);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-  /* ── COMPONENTS ── */
-  .section-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
-  .kpi { background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px 18px; }
-  .kpi-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-  .kpi-val { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
-  .kpi-sub { font-size: 11px; color: var(--ink4); margin-top: 5px; }
-  .progress-bar { height: 4px; background: var(--paper2); border-radius: 2px; overflow: hidden; margin-top: 6px; }
-  .progress-fill { height: 100%; border-radius: 2px; }
-  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-  .task-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; transition: all 0.15s; margin-bottom: 8px; }
-  .task-card:hover { border-color: var(--ink4); }
-  .task-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; line-height: 1.4; }
-  .task-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-family: 'DM Mono', monospace; }
-  .tag-gara { background: var(--red-light); color: var(--red-dark); }
-  .tag-logistica { background: var(--blue-light); color: var(--blue); }
-  .tag-sponsor { background: var(--amber-light); color: var(--amber); }
-  .tag-comunicazione { background: var(--purple-light); color: var(--purple); }
-  .tag-sicurezza { background: var(--green-light); color: var(--green); }
-  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .kanban-col { background: var(--paper2); border-radius: 10px; padding: 14px; min-height: 200px; }
-  .kanban-col-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 12px; font-weight: 500; color: var(--ink2); }
-  .col-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .col-count { margin-left: auto; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink4); }
-  .ideas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .idea-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px 18px; }
-  .idea-cat { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
-  .idea-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-  .idea-desc { font-size: 12px; color: var(--ink3); line-height: 1.6; }
-  .idea-footer { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 0.5px solid var(--border); }
-  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--white); border-radius: 10px; overflow: hidden; border: 0.5px solid var(--border); }
-  .data-table th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink4); text-align: left; padding: 10px 14px; border-bottom: 0.5px solid var(--border); background: var(--paper2); }
-  .data-table td { padding: 10px 14px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
-  .data-table tr:last-child td { border-bottom: none; }
-  .data-table tr:hover td { background: var(--paper); }
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s; padding: 16px; }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal { background: var(--white); border-radius: 14px; padding: 28px 32px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
-  .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; }
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-size: 12px; font-weight: 500; color: var(--ink3); margin-bottom: 6px; display: block; }
-  .form-input, .form-select, .form-textarea { width: 100%; padding: 9px 12px; border: 0.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); outline: none; transition: border 0.15s; }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--red); background: var(--white); }
-  .form-textarea { resize: vertical; min-height: 80px; }
-  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-  .add-card { border: 0.5px dashed var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; text-align: center; font-size: 12px; color: var(--ink4); transition: all 0.15s; background: none; width: 100%; font-family: 'DM Sans', sans-serif; }
-  .add-card:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
-  .mini-select { font-size: 10px; border: 0.5px solid var(--border); border-radius: 6px; padding: 2px 6px; background: var(--paper); cursor: pointer; font-family: 'DM Sans', sans-serif; }
-  .icon-btn { font-size: 12px; border: none; background: none; cursor: pointer; color: var(--ink4); padding: 2px 4px; }
-  .icon-btn:hover { color: var(--red); }
-  .loading { text-align: center; padding: 40px; color: var(--ink4); font-size: 13px; }
-  .empty-state { text-align: center; padding: 40px; color: var(--ink4); }
-  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* BUDGET EDITABLE */
+.budget-split{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.budget-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;border:.5px solid var(--border);}
+.budget-table th{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--ink4);padding:10px 12px;border-bottom:.5px solid var(--border);background:var(--paper2);text-align:left;}
+.budget-table td{padding:6px 8px;border-bottom:.5px solid var(--border);}
+.budget-table tr:last-child td{border-bottom:none;background:var(--paper2);}
+.budget-input{width:100%;border:none;background:transparent;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--ink);padding:4px 6px;border-radius:4px;}
+.budget-input:focus{outline:none;background:var(--blue-light);}
+.budget-total{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;padding:8px 12px;}
 
-  /* ══════════════════════════════
-     RESPONSIVE — TABLET (≤900px)
-  ══════════════════════════════ */
-  @media (max-width: 900px) {
-    :root { --sidebar-w: 240px; }
-    .sidebar { position: fixed; top: 0; left: 0; height: 100vh; transform: translateX(-100%); }
-    .sidebar.open { transform: translateX(0); }
-    #sidebar-overlay.show { display: block; }
-    #app.visible { flex-direction: column; }
-    .topbar-menu-btn { display: flex; }
-    .topbar-tag { display: none; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .kanban { grid-template-columns: repeat(2, 1fr); }
-    .ideas-grid { grid-template-columns: repeat(2, 1fr); }
-    .card-grid-2 { grid-template-columns: 1fr; }
-    .data-table { font-size: 11px; }
-    .data-table th, .data-table td { padding: 8px 10px; }
-  }
+/* TEAM CARDS */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.team-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:16px;position:relative;}
+.team-card-actions{position:absolute;top:10px;right:10px;display:flex;gap:4px;}
+.team-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#fff;margin:0 auto 10px;}
+.team-name{font-size:13px;font-weight:600;text-align:center;margin-bottom:3px;}
+.team-role{font-size:11px;color:var(--ink4);text-align:center;margin-bottom:8px;line-height:1.4;}
+.team-contact{font-size:11px;color:var(--ink3);text-align:center;line-height:1.8;}
+.team-contact a{color:var(--blue);text-decoration:none;}
 
-  /* ══════════════════════════════
-     RESPONSIVE — MOBILE (≤600px)
-  ══════════════════════════════ */
-  @media (max-width: 600px) {
-    .content { padding: 16px; }
-    .topbar { padding: 0 14px; height: 52px; }
-    .topbar-title { font-size: 14px; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .kpi { padding: 12px 14px; }
-    .kpi-val { font-size: 20px; }
-    .kanban { grid-template-columns: 1fr; gap: 12px; }
-    .ideas-grid { grid-template-columns: 1fr; }
-    .card-grid-2 { grid-template-columns: 1fr; }
-    .modal { padding: 20px 18px; }
-    .modal-title { font-size: 16px; }
-    .section-title { font-size: 13px; }
-    .btn { padding: 6px 12px; font-size: 11px; }
-    /* Nascondi colonne non essenziali nelle tabelle su mobile */
-    .hide-mobile { display: none; }
-    .data-table th, .data-table td { padding: 8px 8px; font-size: 11px; }
-    /* Budget su mobile: una colonna */
-    #page-budget .budget-split { grid-template-columns: 1fr !important; }
-    /* Login */
-    .login-box { padding: 28px 24px; }
-  }
+/* COMUNICAZIONE / PIANO PUBBLICAZIONI */
+.pub-list{display:flex;flex-direction:column;gap:8px;}
+.pub-item{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:90px 80px 90px 1fr 100px 70px;gap:12px;align-items:center;}
+.pub-item:hover{border-color:var(--ink4);}
+.pub-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);white-space:nowrap;}
+.pub-canale{font-size:10px;padding:3px 8px;border-radius:10px;text-align:center;font-family:'DM Mono',monospace;white-space:nowrap;}
+.canale-instagram{background:#FCE8F8;color:#8B0D6B;}
+.canale-facebook{background:#E8F0FC;color:#1A3FA0;}
+.canale-linkedin{background:#E8F4FC;color:#0A5278;}
+.canale-stampa{background:var(--paper2);color:var(--ink3);}
+.canale-email{background:var(--amber-light);color:var(--amber);}
+.canale-sito{background:var(--green-light);color:var(--green);}
+.pub-tipo{font-size:11px;color:var(--ink3);}
+.pub-testo{font-size:12px;color:var(--ink);line-height:1.4;}
+.pub-header{background:var(--paper2);border-radius:8px;padding:8px 16px;display:grid;grid-template-columns:90px 80px 90px 1fr 100px 70px;gap:12px;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--ink4);letter-spacing:.08em;}
 
-  /* Stile speciale per budget split */
-  .budget-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+/* SCENARI / LOGISTICA CARDS */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.item-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;overflow:hidden;position:relative;}
+.item-card-header{background:var(--ink);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
+.item-card-body{padding:12px 14px;}
+.item-card-actions{display:flex;gap:4px;}
+.item-card-actions button{font-size:11px;border:none;background:rgba(255,255,255,.1);color:#aaa;cursor:pointer;border-radius:4px;padding:3px 6px;}
+.item-card-actions button:hover{background:rgba(255,255,255,.2);color:#fff;}
+
+/* LOGISTICA CHECKLIST */
+.logistica-section{margin-bottom:24px;}
+.logistica-items{display:flex;flex-direction:column;gap:6px;}
+.logistica-item{background:var(--white);border:.5px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.logistica-item.done-item{opacity:.6;}
+.logistica-item input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--red);}
+.logistica-item-text{flex:1;font-size:13px;}
+.logistica-item-text.checked{text-decoration:line-through;color:var(--ink4);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  :root{--sidebar-w:240px;}
+  .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  #sidebar-overlay.show{display:block;}
+  #app.visible{flex-direction:column;}
+  .topbar-menu-btn{display:flex;}
+  .topbar-tag{display:none;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .kanban{grid-template-columns:repeat(2,1fr);}
+  .ideas-grid{grid-template-columns:repeat(2,1fr);}
+  .card-grid-2{grid-template-columns:1fr;}
+  .budget-split{grid-template-columns:1fr;}
+  .pub-item{grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;}
+  .pub-header{display:none;}
+}
+@media(max-width:600px){
+  .content{padding:14px;}
+  .topbar{padding:0 14px;height:52px;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .kpi-val{font-size:20px;}
+  .kanban{grid-template-columns:1fr;}
+  .ideas-grid{grid-template-columns:1fr;}
+  .modal{padding:20px 18px;}
+  .hide-mobile{display:none;}
+  .team-grid{grid-template-columns:repeat(2,1fr);}
+  .pub-item{grid-template-columns:1fr;gap:6px;}
+  .items-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo-tag">Project Hub</div>
     <div class="login-logo">Rescue<br>Challenge</div>
-    <div class="form-group">
-      <div class="login-label">Username</div>
-      <input class="login-input" type="text" id="login-user" placeholder="username" autocomplete="username">
-    </div>
-    <div class="form-group">
-      <div class="login-label">Password</div>
-      <input class="login-input" type="password" id="login-pass" placeholder="password" autocomplete="current-password">
-    </div>
+    <div class="form-group"><label style="font-size:12px;color:var(--ink3);margin-bottom:6px;font-weight:500;display:block">Username</label><input class="login-input" type="text" id="login-user" placeholder="username" autocomplete="username"></div>
+    <div class="form-group"><label style="font-size:12px;color:var(--ink3);margin-bottom:6px;font-weight:500;display:block">Password</label><input class="login-input" type="password" id="login-pass" placeholder="password" autocomplete="current-password"></div>
     <button class="login-btn" onclick="doLogin()">Accedi</button>
     <div class="login-error" id="login-error"></div>
-    <div class="login-hint">
-      admin: <code>giovanni / rescue2025</code><br>
-      team: <code>team / challenge2025</code>
-    </div>
+    <div class="login-hint">admin: <code>giovanni / rescue2025</code><br>team: <code>team / challenge2025</code></div>
   </div>
 </div>
 
-<!-- SIDEBAR OVERLAY (mobile) -->
 <div id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<!-- APP -->
 <div id="app">
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-logo">
@@ -235,7 +255,7 @@
     <div class="sidebar-section">
       <div class="sidebar-section-label">Business</div>
       <button class="nav-item" onclick="showPage('sponsor',this)"><span class="nav-icon">◆</span>Sponsor DB<span class="nav-badge" id="badge-sponsor">0</span></button>
-      <button class="nav-item" onclick="showPage('comunicazione',this)"><span class="nav-icon">◉</span>Comunicazione</button>
+      <button class="nav-item" onclick="showPage('comunicazione',this)"><span class="nav-icon">◉</span>Piano Pubblicazioni</button>
     </div>
     <div class="sidebar-divider"></div>
     <div class="sidebar-section">
@@ -252,7 +272,7 @@
 
   <div class="main">
     <div class="topbar">
-      <button class="topbar-menu-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <button class="topbar-menu-btn" onclick="toggleSidebar()">☰</button>
       <div class="topbar-title" id="page-title">Dashboard</div>
       <span class="topbar-tag">RESCUE CHALLENGE</span>
       <button class="btn btn-red" id="topbar-add-btn" onclick="openAddModal()" style="display:none">＋ Aggiungi</button>
@@ -267,7 +287,7 @@
           <div class="kpi"><div class="kpi-label">Sponsor</div><div class="kpi-val" id="kpi-sponsor" style="color:var(--amber)">0</div><div class="kpi-sub">nel database</div></div>
           <div class="kpi"><div class="kpi-label">Idee</div><div class="kpi-val" id="kpi-idee" style="color:var(--purple)">0</div><div class="kpi-sub">nell'hub</div></div>
         </div>
-        <div class="section-title">Task urgenti — alta priorità</div>
+        <div class="section-title">Task urgenti</div>
         <div id="dashboard-urgent"><div class="loading">Caricamento...</div></div>
         <div class="section-title" style="margin-top:24px">Ultime idee</div>
         <div id="dashboard-ideas"><div class="loading">Caricamento...</div></div>
@@ -276,132 +296,200 @@
       <!-- KANBAN -->
       <div class="page" id="page-kanban">
         <div class="kanban">
-          <div class="kanban-col">
-            <div class="kanban-col-header"><span class="col-dot" style="background:#aaa"></span>Da fare<span class="col-count" id="cnt-todo">0</span></div>
-            <div id="col-todo"></div>
-            <button class="add-card" onclick="openAddModal()">＋ Aggiungi task</button>
-          </div>
-          <div class="kanban-col">
-            <div class="kanban-col-header"><span class="col-dot" style="background:var(--amber)"></span>In corso<span class="col-count" id="cnt-doing">0</span></div>
-            <div id="col-doing"></div>
-          </div>
-          <div class="kanban-col">
-            <div class="kanban-col-header"><span class="col-dot" style="background:var(--blue)"></span>In revisione<span class="col-count" id="cnt-review">0</span></div>
-            <div id="col-review"></div>
-          </div>
-          <div class="kanban-col">
-            <div class="kanban-col-header"><span class="col-dot" style="background:var(--green)"></span>Completato<span class="col-count" id="cnt-done">0</span></div>
-            <div id="col-done"></div>
-          </div>
+          <div class="kanban-col"><div class="kanban-col-header"><span class="col-dot" style="background:#aaa"></span>Da fare<span class="col-count" id="cnt-todo">0</span></div><div id="col-todo"></div><button class="add-card" onclick="openAddModal()">＋ Aggiungi task</button></div>
+          <div class="kanban-col"><div class="kanban-col-header"><span class="col-dot" style="background:var(--amber)"></span>In corso<span class="col-count" id="cnt-doing">0</span></div><div id="col-doing"></div></div>
+          <div class="kanban-col"><div class="kanban-col-header"><span class="col-dot" style="background:var(--blue)"></span>In revisione<span class="col-count" id="cnt-review">0</span></div><div id="col-review"></div></div>
+          <div class="kanban-col"><div class="kanban-col-header"><span class="col-dot" style="background:var(--green)"></span>Completato<span class="col-count" id="cnt-done">0</span></div><div id="col-done"></div></div>
         </div>
       </div>
 
       <!-- TIMELINE -->
       <div class="page" id="page-timeline">
-        <div style="overflow-x:auto">
-        <table class="data-table">
-          <thead><tr><th>Fase</th><th class="hide-mobile">Periodo</th><th class="hide-mobile">Azioni chiave</th><th>Stato</th></tr></thead>
-          <tbody>
-            <tr><td><strong>1 — Fondazione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 1–2</td><td class="hide-mobile" style="color:var(--ink3)">Regolamento, identità visiva, iscrizioni, social</td><td><span class="tag tag-comunicazione">In corso</span></td></tr>
-            <tr><td><strong>2 — Sponsor</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 2–4</td><td class="hide-mobile" style="color:var(--ink3)">Dossier, trattative, contratti</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td><strong>3 — Iscrizioni</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 3–5</td><td class="hide-mobile" style="color:var(--ink3)">Inviti, raccolta iscrizioni, conferma squadre</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td><strong>4 — Logistica</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 3–5</td><td class="hide-mobile" style="color:var(--ink3)">Location, allestimento, viabilità</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td><strong>5 — Comunicazione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 2–6</td><td class="hide-mobile" style="color:var(--ink3)">Social media, comunicati, media partner</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td><strong>6 — Commissione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 4–5</td><td class="hide-mobile" style="color:var(--ink3)">Nomina giudici, briefing, schede valutazione</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td><strong>7 — Pre-evento</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">-2 sett.</td><td class="hide-mobile" style="color:var(--ink3)">Allestimento, test scenari, brief staff</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-            <tr><td style="color:var(--red)"><strong>⚡ EVENTO</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--red);white-space:nowrap">Ven–Dom</td><td class="hide-mobile" style="color:var(--ink3)">Accoglienza → Gironi → Finali → Premiazione</td><td><span class="tag tag-gara">TARGET</span></td></tr>
-            <tr><td><strong>8 — Post-evento</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">+2 sett.</td><td class="hide-mobile" style="color:var(--ink3)">Report sponsor, rassegna stampa, edizione 2</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
-          </tbody>
-        </table>
-        </div>
+        <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Fase</th><th class="hide-mobile">Periodo</th><th class="hide-mobile">Azioni chiave</th><th>Stato</th></tr></thead><tbody>
+          <tr><td><strong>1 — Fondazione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3);white-space:nowrap">Mese 1–2</td><td class="hide-mobile" style="color:var(--ink3)">Regolamento, identità visiva, iscrizioni, social</td><td><span class="tag tag-comunicazione">In corso</span></td></tr>
+          <tr><td><strong>2 — Sponsor</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">Mese 2–4</td><td class="hide-mobile" style="color:var(--ink3)">Dossier, trattative, contratti</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td><strong>3 — Iscrizioni</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">Mese 3–5</td><td class="hide-mobile" style="color:var(--ink3)">Inviti, raccolta iscrizioni, conferma squadre</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td><strong>4 — Logistica</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">Mese 3–5</td><td class="hide-mobile" style="color:var(--ink3)">Location, allestimento, viabilità</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td><strong>5 — Comunicazione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">Mese 2–6</td><td class="hide-mobile" style="color:var(--ink3)">Social, comunicati, media partner</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td><strong>6 — Commissione</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">Mese 4–5</td><td class="hide-mobile" style="color:var(--ink3)">Nomina giudici, briefing, schede valutazione</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td><strong>7 — Pre-evento</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">-2 sett.</td><td class="hide-mobile" style="color:var(--ink3)">Allestimento, test scenari, brief staff</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+          <tr><td style="color:var(--red)"><strong>⚡ EVENTO</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--red)">Ven–Dom</td><td class="hide-mobile" style="color:var(--ink3)">Accoglienza → Gironi → Finali → Premiazione</td><td><span class="tag tag-gara">TARGET</span></td></tr>
+          <tr><td><strong>8 — Post-evento</strong></td><td class="hide-mobile" style="font-family:'DM Mono',monospace;color:var(--ink3)">+2 sett.</td><td class="hide-mobile" style="color:var(--ink3)">Report sponsor, rassegna stampa, edizione 2</td><td><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></td></tr>
+        </tbody></table></div>
       </div>
 
       <!-- BUDGET -->
       <div class="page" id="page-budget">
         <div class="kpi-grid">
-          <div class="kpi"><div class="kpi-label">Budget totale</div><div class="kpi-val">40.000€</div></div>
-          <div class="kpi"><div class="kpi-label">Da sponsor</div><div class="kpi-val" style="color:var(--green)">28.000€</div><div class="kpi-sub">70%</div></div>
-          <div class="kpi"><div class="kpi-label">Quote iscrizione</div><div class="kpi-val" style="color:var(--blue)">6.000€</div><div class="kpi-sub">8×750€</div></div>
-          <div class="kpi"><div class="kpi-label">Utile stimato</div><div class="kpi-val" style="color:var(--amber)">+1.500€</div></div>
+          <div class="kpi"><div class="kpi-label">Budget totale</div><div class="kpi-val" id="b-totale">0€</div></div>
+          <div class="kpi"><div class="kpi-label">Totale entrate</div><div class="kpi-val" id="b-entrate" style="color:var(--green)">0€</div></div>
+          <div class="kpi"><div class="kpi-label">Totale uscite</div><div class="kpi-val" id="b-uscite" style="color:var(--red)">0€</div></div>
+          <div class="kpi"><div class="kpi-label">Saldo</div><div class="kpi-val" id="b-saldo">0€</div><div class="progress-bar"><div class="progress-fill" id="b-saldo-bar" style="width:0%"></div></div></div>
         </div>
         <div class="budget-split">
-          <div><div class="section-title">Entrate</div><table class="data-table"><thead><tr><th>Voce</th><th>€</th></tr></thead><tbody>
-            <tr><td>Main Sponsor (2×)</td><td style="font-family:'DM Mono',monospace">16.000</td></tr>
-            <tr><td>Sponsor tecnici (4×)</td><td style="font-family:'DM Mono',monospace">8.000</td></tr>
-            <tr><td>Partner locali (5×)</td><td style="font-family:'DM Mono',monospace">4.000</td></tr>
-            <tr><td>Quote iscrizione</td><td style="font-family:'DM Mono',monospace">6.000</td></tr>
-            <tr><td>Contributi istituzionali</td><td style="font-family:'DM Mono',monospace">4.000</td></tr>
-            <tr><td>Biglietti / gadget</td><td style="font-family:'DM Mono',monospace">2.000</td></tr>
-            <tr><td><strong>TOTALE</strong></td><td style="font-family:'DM Mono',monospace;font-weight:600;color:var(--green)">40.000</td></tr>
-          </tbody></table></div>
-          <div><div class="section-title">Uscite</div><table class="data-table"><thead><tr><th>Voce</th><th>€</th></tr></thead><tbody>
-            <tr><td>Location e allestimento</td><td style="font-family:'DM Mono',monospace">9.000</td></tr>
-            <tr><td>Catering e vitto</td><td style="font-family:'DM Mono',monospace">6.000</td></tr>
-            <tr><td>Staff e volontari</td><td style="font-family:'DM Mono',monospace">4.500</td></tr>
-            <tr><td>Comunicazione e stampa</td><td style="font-family:'DM Mono',monospace">4.000</td></tr>
-            <tr><td>Premi e trofei</td><td style="font-family:'DM Mono',monospace">3.500</td></tr>
-            <tr><td>Materiali gara</td><td style="font-family:'DM Mono',monospace">3.000</td></tr>
-            <tr><td>Assicurazioni e permessi</td><td style="font-family:'DM Mono',monospace">2.500</td></tr>
-            <tr><td>Riprese video/foto</td><td style="font-family:'DM Mono',monospace">2.000</td></tr>
-            <tr><td>Imprevisti (5%)</td><td style="font-family:'DM Mono',monospace">2.000</td></tr>
-            <tr><td><strong>TOTALE</strong></td><td style="font-family:'DM Mono',monospace;font-weight:600;color:var(--red)">38.500</td></tr>
-          </tbody></table></div>
+          <div>
+            <div class="section-title">Entrate <button class="btn btn-sm btn-red" style="font-size:11px" onclick="addBudgetRow('entrate')">＋ Voce</button></div>
+            <table class="budget-table"><thead><tr><th>Voce</th><th>Importo €</th><th>Note</th><th></th></tr></thead><tbody id="tbody-entrate"></tbody>
+            <tfoot><tr><td colspan="4"><div style="display:flex;justify-content:space-between;padding:8px 12px"><span style="font-size:12px;font-weight:600">TOTALE ENTRATE</span><span class="budget-total" id="tot-entrate" style="color:var(--green)">0€</span></div></td></tr></tfoot></table>
+          </div>
+          <div>
+            <div class="section-title">Uscite <button class="btn btn-sm btn-red" style="font-size:11px" onclick="addBudgetRow('uscite')">＋ Voce</button></div>
+            <table class="budget-table"><thead><tr><th>Voce</th><th>Importo €</th><th>Note</th><th></th></tr></thead><tbody id="tbody-uscite"></tbody>
+            <tfoot><tr><td colspan="4"><div style="display:flex;justify-content:space-between;padding:8px 12px"><span style="font-size:12px;font-weight:600">TOTALE USCITE</span><span class="budget-total" id="tot-uscite" style="color:var(--red)">0€</span></div></td></tr></tfoot></table>
+          </div>
         </div>
       </div>
 
+      <!-- SCENARI -->
       <div class="page" id="page-scenari"><div id="scenari-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- SQUADRE -->
       <div class="page" id="page-squadre"><div id="squadre-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- LOGISTICA -->
       <div class="page" id="page-logistica"><div id="logistica-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- SPONSOR -->
       <div class="page" id="page-sponsor"><div id="sponsor-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- COMUNICAZIONE / PIANO PUBBLICAZIONI -->
       <div class="page" id="page-comunicazione"><div id="comunicazione-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- TEAM -->
       <div class="page" id="page-team"><div id="team-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- IDEE -->
       <div class="page" id="page-idee"><div id="idee-list"><div class="loading">Caricamento...</div></div></div>
     </div>
   </div>
 </div>
 
-<!-- MODALS -->
+<!-- ══ MODALS ══ -->
 <div class="modal-overlay" id="modal-task">
   <div class="modal">
     <div class="modal-title" id="modal-task-title">Nuovo task</div>
     <div class="form-group"><label class="form-label">Titolo</label><input class="form-input" id="task-titolo" placeholder="Descrivi il task..."></div>
-    <div class="form-group"><label class="form-label">Area</label><select class="form-select" id="task-area"><option value="logistica">Logistica</option><option value="gara">Gara</option><option value="sponsor">Sponsor</option><option value="comunicazione">Comunicazione</option><option value="sicurezza">Sicurezza</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Area</label><select class="form-select" id="task-area"><option value="logistica">Logistica</option><option value="gara">Gara</option><option value="sponsor">Sponsor</option><option value="comunicazione">Comunicazione</option><option value="sicurezza">Sicurezza</option></select></div>
+      <div class="form-group"><label class="form-label">Priorità</label><select class="form-select" id="task-priorita"><option value="alta">Alta</option><option value="media">Media</option><option value="bassa">Bassa</option></select></div>
+    </div>
     <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="task-stato"><option value="todo">Da fare</option><option value="doing">In corso</option><option value="review">In revisione</option><option value="done">Completato</option></select></div>
-    <div class="form-group"><label class="form-label">Priorità</label><select class="form-select" id="task-priorita"><option value="alta">Alta</option><option value="media">Media</option><option value="bassa">Bassa</option></select></div>
     <div class="form-group"><label class="form-label">Note</label><textarea class="form-textarea" id="task-note" placeholder="Note opzionali..."></textarea></div>
     <div class="modal-actions"><button class="btn" onclick="closeModal('modal-task')">Annulla</button><button class="btn btn-red" onclick="saveTask()">Salva</button></div>
   </div>
 </div>
+
 <div class="modal-overlay" id="modal-idea">
   <div class="modal">
-    <div class="modal-title">Nuova idea</div>
+    <div class="modal-title" id="modal-idea-title">Nuova idea</div>
     <div class="form-group"><label class="form-label">Titolo</label><input class="form-input" id="idea-titolo" placeholder="Titolo..."></div>
     <div class="form-group"><label class="form-label">Categoria</label><select class="form-select" id="idea-cat"><option value="gara">Gara</option><option value="comunicazione">Comunicazione</option><option value="esperienza">Esperienza pubblico</option><option value="business">Business</option><option value="formazione">Formazione</option></select></div>
     <div class="form-group"><label class="form-label">Descrizione</label><textarea class="form-textarea" id="idea-desc" placeholder="Descrivi l'idea..."></textarea></div>
     <div class="modal-actions"><button class="btn" onclick="closeModal('modal-idea')">Annulla</button><button class="btn btn-red" onclick="saveIdea()">Salva</button></div>
   </div>
 </div>
+
 <div class="modal-overlay" id="modal-sponsor">
   <div class="modal">
-    <div class="modal-title">Nuovo sponsor</div>
+    <div class="modal-title" id="modal-sponsor-title">Nuovo sponsor</div>
     <div class="form-group"><label class="form-label">Nome azienda</label><input class="form-input" id="sp-nome" placeholder="Nome..."></div>
-    <div class="form-group"><label class="form-label">Settore</label><input class="form-input" id="sp-settore" placeholder="Es. Dispositivi medici..."></div>
-    <div class="form-group"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="main">Main Sponsor</option><option value="tecnico">Sponsor Tecnico</option><option value="partner">Partner Locale</option><option value="istituzionale">Istituzionale</option></select></div>
-    <div class="form-group"><label class="form-label">Valore stimato</label><input class="form-input" id="sp-valore" placeholder="Es. 5.000€"></div>
-    <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="sp-stato"><option value="da_contattare">Da contattare</option><option value="contattato">Contattato</option><option value="trattativa">In trattativa</option><option value="confermato">Confermato</option><option value="declinato">Declinato</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Settore</label><input class="form-input" id="sp-settore" placeholder="Es. Dispositivi medici..."></div>
+      <div class="form-group"><label class="form-label">Valore stimato (€)</label><input class="form-input" id="sp-valore" placeholder="Es. 5000"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tier</label><select class="form-select" id="sp-tier"><option value="main">Main Sponsor</option><option value="tecnico">Sponsor Tecnico</option><option value="partner">Partner Locale</option><option value="istituzionale">Istituzionale</option></select></div>
+      <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="sp-stato"><option value="da_contattare">Da contattare</option><option value="contattato">Contattato</option><option value="trattativa">In trattativa</option><option value="confermato">Confermato</option><option value="declinato">Declinato</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Referente</label><input class="form-input" id="sp-referente" placeholder="Nome referente..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Telefono</label><input class="form-input" id="sp-tel" placeholder="+39..."></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="sp-email" placeholder="email@..."></div>
+    </div>
     <div class="form-group"><label class="form-label">Note</label><textarea class="form-textarea" id="sp-note" placeholder="Note..."></textarea></div>
     <div class="modal-actions"><button class="btn" onclick="closeModal('modal-sponsor')">Annulla</button><button class="btn btn-red" onclick="saveSponsor()">Salva</button></div>
   </div>
 </div>
+
 <div class="modal-overlay" id="modal-squadra">
   <div class="modal">
-    <div class="modal-title">Nuovo ente / squadra</div>
+    <div class="modal-title" id="modal-squadra-title">Nuovo ente / squadra</div>
     <div class="form-group"><label class="form-label">Nome ente</label><input class="form-input" id="sq-nome" placeholder="Es. CRI Padova..."></div>
-    <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="sq-tipo"><option value="CRI">Croce Rossa</option><option value="ANPAS">ANPAS / Croce Verde</option><option value="Misericordia">Misericordia</option><option value="SUEM">SUEM 118</option><option value="Altro">Altro</option></select></div>
-    <div class="form-group"><label class="form-label">Provincia / Regione</label><input class="form-input" id="sq-zona" placeholder="Es. Padova, Veneto..."></div>
-    <div class="form-group"><label class="form-label">Contatto referente</label><input class="form-input" id="sq-contatto" placeholder="Nome e email..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="sq-tipo"><option value="CRI">Croce Rossa</option><option value="ANPAS">ANPAS / Croce Verde</option><option value="Misericordia">Misericordia</option><option value="SUEM">SUEM 118</option><option value="Altro">Altro</option></select></div>
+      <div class="form-group"><label class="form-label">Zona</label><input class="form-input" id="sq-zona" placeholder="Es. Padova, Veneto..."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Referente</label><input class="form-input" id="sq-referente" placeholder="Nome referente..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Telefono</label><input class="form-input" id="sq-tel" placeholder="+39..."></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="sq-email" placeholder="email@..."></div>
+    </div>
     <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="sq-stato"><option value="da_invitare">Da invitare</option><option value="invitato">Invitato</option><option value="confermato">Confermato</option><option value="declinato">Declinato</option></select></div>
+    <div class="form-group"><label class="form-label">Note</label><textarea class="form-textarea" id="sq-note" placeholder="Note..."></textarea></div>
     <div class="modal-actions"><button class="btn" onclick="closeModal('modal-squadra')">Annulla</button><button class="btn btn-red" onclick="saveSquadra()">Salva</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-scenario">
+  <div class="modal">
+    <div class="modal-title" id="modal-scenario-title">Nuovo scenario</div>
+    <div class="form-group"><label class="form-label">Nome scenario</label><input class="form-input" id="sc-nome" placeholder="Es. Trauma stradale multiplo..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Difficoltà</label><select class="form-select" id="sc-diff"><option value="Base">Base</option><option value="Medio">Medio</option><option value="Avanzato">Avanzato</option></select></div>
+      <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="sc-tipo"><option value="Eliminatoria">Eliminatoria</option><option value="Finale">Finale</option><option value="Pratica">Pratica</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Descrizione</label><textarea class="form-textarea" id="sc-desc" placeholder="Descrivi lo scenario..."></textarea></div>
+    <div class="form-group"><label class="form-label">Tag (separati da virgola)</label><input class="form-input" id="sc-tags" placeholder="Es. trauma, ABCDE, immobilizzazione"></div>
+    <div class="form-group"><label class="form-label">Note per i giudici</label><textarea class="form-textarea" id="sc-note" placeholder="Criteri di valutazione, note..."></textarea></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('modal-scenario')">Annulla</button><button class="btn btn-red" onclick="saveScenario()">Salva</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-logistica">
+  <div class="modal">
+    <div class="modal-title" id="modal-logistica-title">Nuovo elemento logistica</div>
+    <div class="form-group"><label class="form-label">Descrizione</label><input class="form-input" id="lo-desc" placeholder="Es. Area parcheggio ambulanze..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Categoria</label><select class="form-select" id="lo-cat"><option value="venue">Venue & Spazi</option><option value="operativo">Operativo</option><option value="permessi">Permessi & Documenti</option><option value="altro">Altro</option></select></div>
+      <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="lo-stato"><option value="da_fare">Da fare</option><option value="in_corso">In corso</option><option value="fatto">Fatto</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Responsabile</label><input class="form-input" id="lo-resp" placeholder="Chi se ne occupa..."></div>
+    <div class="form-group"><label class="form-label">Note</label><textarea class="form-textarea" id="lo-note" placeholder="Note..."></textarea></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('modal-logistica')">Annulla</button><button class="btn btn-red" onclick="saveLogistica()">Salva</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pub">
+  <div class="modal">
+    <div class="modal-title" id="modal-pub-title">Nuova pubblicazione</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data</label><input class="form-input" type="date" id="pub-data"></div>
+      <div class="form-group"><label class="form-label">Canale</label><select class="form-select" id="pub-canale"><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="linkedin">LinkedIn</option><option value="stampa">Stampa</option><option value="email">Email / Newsletter</option><option value="sito">Sito web</option></select></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tipo contenuto</label><select class="form-select" id="pub-tipo"><option value="Post">Post</option><option value="Story">Story</option><option value="Comunicato">Comunicato</option><option value="Newsletter">Newsletter</option><option value="Articolo">Articolo</option><option value="Video">Video</option><option value="Altro">Altro</option></select></div>
+      <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="pub-stato"><option value="bozza">Bozza</option><option value="pronto">Pronto</option><option value="schedulato">Schedulato</option><option value="pubblicato">Pubblicato</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Titolo / Oggetto</label><input class="form-input" id="pub-titolo" placeholder="Titolo del contenuto..."></div>
+    <div class="form-group"><label class="form-label">Testo / Descrizione</label><textarea class="form-textarea" id="pub-testo" placeholder="Testo del post o descrizione..."></textarea></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('modal-pub')">Annulla</button><button class="btn btn-red" onclick="savePub()">Salva</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-team">
+  <div class="modal">
+    <div class="modal-title" id="modal-team-title">Nuovo membro team</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="tm-nome" placeholder="Nome completo..."></div>
+      <div class="form-group"><label class="form-label">Ruolo</label><input class="form-input" id="tm-ruolo" placeholder="Es. Direttore Tecnico..."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Area di competenza</label><select class="form-select" id="tm-area"><option value="direzione">Direzione</option><option value="gara">Gara & Tecnico</option><option value="sponsor">Sponsor & Business</option><option value="comunicazione">Comunicazione</option><option value="logistica">Logistica</option><option value="sicurezza">Sicurezza</option><option value="admin">Segreteria & Admin</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Telefono</label><input class="form-input" id="tm-tel" placeholder="+39..."></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="tm-email" placeholder="email@..."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Note / Responsabilità</label><textarea class="form-textarea" id="tm-note" placeholder="Note sul ruolo..."></textarea></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('modal-team')">Annulla</button><button class="btn btn-red" onclick="saveTeam()">Salva</button></div>
   </div>
 </div>
 
@@ -421,81 +509,83 @@ const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 
 const USERS = {
-  "giovanni": { password: "rescue2025", role: "Admin", nome: "Giovanni" },
-  "team": { password: "challenge2025", role: "Membro", nome: "Team" },
-  "ospite": { password: "ospite123", role: "Ospite", nome: "Ospite" }
+  "giovanni":{ password:"rescue2025", role:"Admin", nome:"Giovanni" },
+  "team":{ password:"challenge2025", role:"Membro", nome:"Team" },
+  "ospite":{ password:"ospite123", role:"Ospite", nome:"Ospite" }
 };
 
-let currentUser = null, currentPage = 'dashboard', editingTaskId = null;
+let currentUser=null, currentPage='dashboard', editingId={};
+const colors = ['var(--red)','var(--blue)','var(--amber)','var(--purple)','var(--green)','#E05A2B','#1A7A7A','#7A1A5A'];
 
-// SIDEBAR MOBILE
-window.toggleSidebar = function() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('show');
-};
-window.closeSidebar = function() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('show');
-};
+// ── SIDEBAR ──
+window.toggleSidebar=()=>{ document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('show'); };
+window.closeSidebar=()=>{ document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('show'); };
 
-window.doLogin = function() {
-  const u = document.getElementById('login-user').value.trim().toLowerCase();
-  const p = document.getElementById('login-pass').value;
-  const err = document.getElementById('login-error');
-  if (USERS[u] && USERS[u].password === p) {
-    currentUser = { username: u, ...USERS[u] };
-    document.getElementById('sidebar-username').textContent = currentUser.nome;
-    document.getElementById('sidebar-role').textContent = currentUser.role;
-    document.getElementById('login-screen').style.display = 'none';
+// ── LOGIN ──
+window.doLogin=function(){
+  const u=document.getElementById('login-user').value.trim().toLowerCase();
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  if(USERS[u]&&USERS[u].password===p){
+    currentUser={username:u,...USERS[u]};
+    document.getElementById('sidebar-username').textContent=currentUser.nome;
+    document.getElementById('sidebar-role').textContent=currentUser.role;
+    document.getElementById('login-screen').style.display='none';
     document.getElementById('app').classList.add('visible');
-    err.textContent = '';
-    initApp();
-  } else { err.textContent = 'Username o password errati'; }
+    err.textContent=''; initApp();
+  } else err.textContent='Username o password errati';
 };
-window.doLogout = function() {
-  document.getElementById('login-screen').style.display = 'flex';
+window.doLogout=function(){
+  document.getElementById('login-screen').style.display='flex';
   document.getElementById('app').classList.remove('visible');
-  document.getElementById('login-user').value = '';
-  document.getElementById('login-pass').value = '';
+  ['login-user','login-pass'].forEach(id=>document.getElementById(id).value='');
 };
-document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') window.doLogin(); });
-document.getElementById('login-user').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pass').focus(); });
+document.getElementById('login-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') window.doLogin(); });
+document.getElementById('login-user').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('login-pass').focus(); });
 
-window.showPage = function(page, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+// ── NAV ──
+window.showPage=function(page,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   if(btn) btn.classList.add('active');
-  currentPage = page;
-  const titles = { dashboard:'Dashboard', kanban:'Planner Kanban', timeline:'Timeline & Fasi', budget:'Budget', scenari:'Scenari di Gara', squadre:'Squadre & Enti', logistica:'Logistica', sponsor:'Sponsor DB', comunicazione:'Comunicazione', team:'Team organizzativo', idee:'Hub Idee' };
-  document.getElementById('page-title').textContent = titles[page]||page;
-  document.getElementById('topbar-add-btn').style.display = ['kanban','sponsor','idee','squadre'].includes(page) ? 'flex' : 'none';
+  currentPage=page;
+  const titles={dashboard:'Dashboard',kanban:'Planner Kanban',timeline:'Timeline & Fasi',budget:'Budget',scenari:'Scenari di Gara',squadre:'Squadre & Enti',logistica:'Logistica',sponsor:'Sponsor DB',comunicazione:'Piano Pubblicazioni',team:'Team organizzativo',idee:'Hub Idee'};
+  document.getElementById('page-title').textContent=titles[page]||page;
+  const addPages=['kanban','sponsor','idee','squadre','scenari','logistica','comunicazione','team'];
+  document.getElementById('topbar-add-btn').style.display=addPages.includes(page)?'flex':'none';
   closeSidebar();
 };
 
-window.openAddModal = function() {
-  const map = { kanban:'modal-task', sponsor:'modal-sponsor', idee:'modal-idea', squadre:'modal-squadra' };
-  const m = map[currentPage]||'modal-task';
-  if(m==='modal-task') { editingTaskId=null; document.getElementById('modal-task-title').textContent='Nuovo task'; document.getElementById('task-titolo').value=''; document.getElementById('task-note').value=''; }
+window.openAddModal=function(){
+  const map={kanban:'modal-task',sponsor:'modal-sponsor',idee:'modal-idea',squadre:'modal-squadra',scenari:'modal-scenario',logistica:'modal-logistica',comunicazione:'modal-pub',team:'modal-team'};
+  const m=map[currentPage]||'modal-task';
+  // reset editing
+  const base=m.replace('modal-',''); editingId[base]=null;
+  const titleMap={task:'Nuovo task',sponsor:'Nuovo sponsor',idea:'Nuova idea',squadra:'Nuovo ente / squadra',scenario:'Nuovo scenario',logistica:'Nuovo elemento logistica',pub:'Nuova pubblicazione',team:'Nuovo membro team'};
+  const tid=document.getElementById('modal-'+base+'-title')||document.getElementById('modal-task-title');
+  if(tid) tid.textContent=titleMap[base]||'Nuovo';
   document.getElementById(m).classList.add('open');
 };
-window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
-document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); }));
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); }));
 
-async function addItem(col, data) { return await addDoc(collection(db,col), {...data, createdAt:serverTimestamp(), createdBy:currentUser.nome}); }
-async function updateItem(col, id, data) { await updateDoc(doc(db,col,id), data); }
-async function deleteItem(col, id) { await deleteDoc(doc(db,col,id)); }
+// ── FIRESTORE HELPERS ──
+async function addItem(col,data){ return await addDoc(collection(db,col),{...data,createdAt:serverTimestamp(),createdBy:currentUser.nome}); }
+async function updateItem(col,id,data){ await updateDoc(doc(db,col,id),data); }
+async function deleteItem(col,id){ await deleteDoc(doc(db,col,id)); }
 
-window.saveTask = async function() {
-  const titolo = document.getElementById('task-titolo').value.trim(); if(!titolo) return;
-  const data = { titolo, area:document.getElementById('task-area').value, stato:document.getElementById('task-stato').value, priorita:document.getElementById('task-priorita').value, note:document.getElementById('task-note').value };
-  if(editingTaskId) { await updateItem('tasks',editingTaskId,data); editingTaskId=null; } else await addItem('tasks',data);
-  closeModal('modal-task');
+// ── TASKS ──
+window.saveTask=async function(){
+  const titolo=document.getElementById('task-titolo').value.trim(); if(!titolo) return;
+  const data={titolo,area:document.getElementById('task-area').value,stato:document.getElementById('task-stato').value,priorita:document.getElementById('task-priorita').value,note:document.getElementById('task-note').value};
+  if(editingId.task) await updateItem('tasks',editingId.task,data); else await addItem('tasks',data);
+  editingId.task=null; closeModal('modal-task');
 };
-window.changeTaskStatus = async function(id,stato) { await updateItem('tasks',id,{stato}); };
-window.deleteTask = async function(id) { if(confirm('Eliminare?')) await deleteItem('tasks',id); };
-window.editTask = function(id,titolo,area,stato,priorita,note) {
-  editingTaskId=id;
+window.changeTaskStatus=async(id,stato)=>updateItem('tasks',id,{stato});
+window.deleteTask=async id=>{ if(confirm('Eliminare?')) await deleteItem('tasks',id); };
+window.editTask=function(id,titolo,area,stato,priorita,note){
+  editingId.task=id;
   document.getElementById('modal-task-title').textContent='Modifica task';
   document.getElementById('task-titolo').value=titolo;
   document.getElementById('task-area').value=area;
@@ -504,68 +594,320 @@ window.editTask = function(id,titolo,area,stato,priorita,note) {
   document.getElementById('task-note').value=note||'';
   document.getElementById('modal-task').classList.add('open');
 };
-function mkTag(area) {
-  const m={gara:'tag-gara',logistica:'tag-logistica',sponsor:'tag-sponsor',comunicazione:'tag-comunicazione',sicurezza:'tag-sicurezza'};
-  return `<span class="tag ${m[area]||''}">${area}</span>`;
-}
-function renderTask(t,id) {
+function mkTag(area){ const m={gara:'tag-gara',logistica:'tag-logistica',sponsor:'tag-sponsor',comunicazione:'tag-comunicazione',sicurezza:'tag-sicurezza'}; return `<span class="tag ${m[area]||''}">${area}</span>`; }
+function renderTask(t,id){
   const pc={alta:'var(--red)',media:'var(--amber)',bassa:'var(--green)'};
-  const sT=(t.titolo||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-  const sN=(t.note||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  const sT=esc(t.titolo); const sN=esc(t.note||'');
   return `<div class="task-card" style="border-left:3px solid ${pc[t.priorita]||'#ccc'}">
     <div class="task-title">${t.titolo||''}</div>
-    <div class="task-meta">${mkTag(t.area)}
-      <span style="margin-left:auto;display:flex;gap:4px;align-items:center">
-        <select class="mini-select" onchange="changeTaskStatus('${id}',this.value)">
-          <option value="todo" ${t.stato==='todo'?'selected':''}>Da fare</option>
-          <option value="doing" ${t.stato==='doing'?'selected':''}>In corso</option>
-          <option value="review" ${t.stato==='review'?'selected':''}>Revisione</option>
-          <option value="done" ${t.stato==='done'?'selected':''}>Fatto</option>
-        </select>
-        <button class="icon-btn" onclick="editTask('${id}','${sT}','${t.area}','${t.stato}','${t.priorita}','${sN}')">✏️</button>
-        <button class="icon-btn" onclick="deleteTask('${id}')">🗑️</button>
-      </span>
-    </div>
+    <div class="task-meta">${mkTag(t.area)}<span style="margin-left:auto;display:flex;gap:4px;align-items:center">
+      <select class="mini-select" onchange="changeTaskStatus('${id}',this.value)">
+        <option value="todo" ${t.stato==='todo'?'selected':''}>Da fare</option>
+        <option value="doing" ${t.stato==='doing'?'selected':''}>In corso</option>
+        <option value="review" ${t.stato==='review'?'selected':''}>Revisione</option>
+        <option value="done" ${t.stato==='done'?'selected':''}>Fatto</option>
+      </select>
+      <button class="icon-btn" onclick='editTask("${id}","${sT}","${t.area}","${t.stato}","${t.priorita}","${sN}")'>✏️</button>
+      <button class="icon-btn" onclick="deleteTask('${id}')">🗑️</button>
+    </span></div>
   </div>`;
 }
 
-window.saveIdea = async function() {
-  const titolo=document.getElementById('idea-titolo').value.trim(); if(!titolo) return;
-  await addItem('idee',{titolo,categoria:document.getElementById('idea-cat').value,descrizione:document.getElementById('idea-desc').value,voti:0});
-  document.getElementById('idea-titolo').value=''; document.getElementById('idea-desc').value='';
-  closeModal('modal-idea');
+// ── SCENARI ──
+window.saveScenario=async function(){
+  const nome=document.getElementById('sc-nome').value.trim(); if(!nome) return;
+  const data={nome,difficolta:document.getElementById('sc-diff').value,tipo:document.getElementById('sc-tipo').value,descrizione:document.getElementById('sc-desc').value,tags:document.getElementById('sc-tags').value.split(',').map(t=>t.trim()).filter(Boolean),note:document.getElementById('sc-note').value};
+  if(editingId.scenario) await updateItem('scenari',editingId.scenario,data); else await addItem('scenari',data);
+  editingId.scenario=null; closeModal('modal-scenario'); clearFields(['sc-nome','sc-desc','sc-tags','sc-note']);
 };
-window.voteIdea = async function(id,voti) { await updateItem('idee',id,{voti:voti+1}); };
-window.deleteIdea = async function(id) { if(confirm('Eliminare?')) await deleteItem('idee',id); };
+window.deleteScenario=async id=>{ if(confirm('Eliminare scenario?')) await deleteItem('scenari',id); };
+window.editScenario=function(id,nome,diff,tipo,desc,tags,note){
+  editingId.scenario=id;
+  document.getElementById('modal-scenario-title').textContent='Modifica scenario';
+  document.getElementById('sc-nome').value=nome;
+  document.getElementById('sc-diff').value=diff;
+  document.getElementById('sc-tipo').value=tipo;
+  document.getElementById('sc-desc').value=desc;
+  document.getElementById('sc-tags').value=tags;
+  document.getElementById('sc-note').value=note||'';
+  document.getElementById('modal-scenario').classList.add('open');
+};
+function renderScenari(list){
+  const el=document.getElementById('scenari-list'); if(!el) return;
+  const dc={Base:'var(--green)',Medio:'var(--amber)',Avanzato:'var(--red)'};
+  el.innerHTML=`<div class="items-grid">${list.map((s,i)=>`
+    <div class="item-card">
+      <div class="item-card-header">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;color:#666">SCN-${String(i+1).padStart(2,'0')}</span>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${dc[s.difficolta]||'#ccc'}22;color:${dc[s.difficolta]||'#ccc'}">${s.difficolta}</span>
+          <div class="item-card-actions">
+            <button onclick='editScenario("${s.id}","${esc(s.nome)}","${s.difficolta}","${s.tipo||'Eliminatoria'}","${esc(s.descrizione||'')}","${esc((s.tags||[]).join(', '))}","${esc(s.note||'')}")'>✏️</button>
+            <button onclick="deleteScenario('${s.id}')">🗑️</button>
+          </div>
+        </div>
+      </div>
+      <div class="item-card-body">
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px;line-height:1.3">${s.nome}</div>
+        <div style="font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:10px">${s.descrizione||''}</div>
+        ${s.note?`<div style="font-size:11px;color:var(--blue);margin-bottom:8px">📋 ${s.note}</div>`:''}
+        <div style="display:flex;flex-wrap:wrap;gap:5px">${(s.tags||[]).map(t=>`<span style="font-size:10px;padding:2px 7px;border-radius:10px;background:var(--paper2);color:var(--ink3)">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('')}
+    <div class="add-card" onclick="openAddModal()" style="min-height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><div style="font-size:24px">+</div>Aggiungi scenario</div>
+  </div>`;
+}
 
-window.saveSponsor = async function() {
+// ── LOGISTICA ──
+window.saveLogistica=async function(){
+  const desc=document.getElementById('lo-desc').value.trim(); if(!desc) return;
+  const data={descrizione:desc,categoria:document.getElementById('lo-cat').value,stato:document.getElementById('lo-stato').value,responsabile:document.getElementById('lo-resp').value,note:document.getElementById('lo-note').value};
+  if(editingId.logistica) await updateItem('logistica',editingId.logistica,data); else await addItem('logistica',data);
+  editingId.logistica=null; closeModal('modal-logistica'); clearFields(['lo-desc','lo-resp','lo-note']);
+};
+window.deleteLogistica=async id=>{ if(confirm('Eliminare?')) await deleteItem('logistica',id); };
+window.editLogistica=function(id,desc,cat,stato,resp,note){
+  editingId.logistica=id;
+  document.getElementById('modal-logistica-title').textContent='Modifica elemento';
+  document.getElementById('lo-desc').value=desc;
+  document.getElementById('lo-cat').value=cat;
+  document.getElementById('lo-stato').value=stato;
+  document.getElementById('lo-resp').value=resp||'';
+  document.getElementById('lo-note').value=note||'';
+  document.getElementById('modal-logistica').classList.add('open');
+};
+window.changeLogisticaStatus=async(id,stato)=>updateItem('logistica',id,{stato});
+function renderLogistica(list){
+  const el=document.getElementById('logistica-list'); if(!el) return;
+  const cats={venue:'Venue & Spazi',operativo:'Operativo',permessi:'Permessi & Documenti',altro:'Altro'};
+  const groups={venue:[],operativo:[],permessi:[],altro:[]};
+  list.forEach(l=>{ if(groups[l.categoria]) groups[l.categoria].push(l); else groups.altro.push(l); });
+  const statoC={da_fare:'var(--paper2)',in_corso:'var(--amber-light)',fatto:'var(--green-light)'};
+  const statoT={da_fare:'Da fare',in_corso:'In corso',fatto:'✓ Fatto'};
+  const statoTC={da_fare:'var(--ink3)',in_corso:'var(--amber)',fatto:'var(--green)'};
+  el.innerHTML=Object.entries(groups).filter(([,v])=>v.length>0).map(([cat,items])=>`
+    <div class="logistica-section">
+      <div class="section-title">${cats[cat]}</div>
+      <div class="logistica-items">${items.map(l=>`
+        <div class="logistica-item" style="border-left:3px solid ${statoC[l.stato]||'var(--border)'}">
+          <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${statoC[l.stato]};color:${statoTC[l.stato]};font-family:'DM Mono',monospace;white-space:nowrap;cursor:pointer"
+            onclick="cycleLogisticaStatus('${l.id}','${l.stato}')">${statoT[l.stato]}</span>
+          <span class="logistica-item-text ${l.stato==='fatto'?'checked':''}">${l.descrizione}</span>
+          ${l.responsabile?`<span style="font-size:11px;color:var(--ink4);white-space:nowrap">👤 ${l.responsabile}</span>`:''}
+          <span style="display:flex;gap:2px;margin-left:auto">
+            <button class="icon-btn" onclick='editLogistica("${l.id}","${esc(l.descrizione)}","${l.categoria}","${l.stato}","${esc(l.responsabile||'')}","${esc(l.note||'')}")'>✏️</button>
+            <button class="icon-btn" onclick="deleteLogistica('${l.id}')">🗑️</button>
+          </span>
+        </div>`).join('')}
+      </div>
+    </div>`).join('')+`<button class="add-card" onclick="openAddModal()" style="margin-top:8px">＋ Aggiungi elemento</button>`;
+}
+window.cycleLogisticaStatus=async function(id,current){
+  const cycle={da_fare:'in_corso',in_corso:'fatto',fatto:'da_fare'};
+  await updateItem('logistica',id,{stato:cycle[current]||'da_fare'});
+};
+
+// ── SPONSOR ──
+window.saveSponsor=async function(){
   const nome=document.getElementById('sp-nome').value.trim(); if(!nome) return;
-  await addItem('sponsor',{nome,settore:document.getElementById('sp-settore').value,tier:document.getElementById('sp-tier').value,valore:document.getElementById('sp-valore').value,stato:document.getElementById('sp-stato').value,note:document.getElementById('sp-note').value});
-  ['sp-nome','sp-settore','sp-valore','sp-note'].forEach(i=>document.getElementById(i).value='');
-  closeModal('modal-sponsor');
+  const data={nome,settore:document.getElementById('sp-settore').value,tier:document.getElementById('sp-tier').value,valore:document.getElementById('sp-valore').value,stato:document.getElementById('sp-stato').value,referente:document.getElementById('sp-referente').value,telefono:document.getElementById('sp-tel').value,email:document.getElementById('sp-email').value,note:document.getElementById('sp-note').value};
+  if(editingId.sponsor) await updateItem('sponsor',editingId.sponsor,data); else await addItem('sponsor',data);
+  editingId.sponsor=null; closeModal('modal-sponsor'); clearFields(['sp-nome','sp-settore','sp-valore','sp-referente','sp-tel','sp-email','sp-note']);
 };
-window.deleteSponsor = async function(id) { if(confirm('Eliminare?')) await deleteItem('sponsor',id); };
-window.changeSponsorStatus = async function(id,stato) { await updateItem('sponsor',id,{stato}); };
+window.deleteSponsor=async id=>{ if(confirm('Eliminare?')) await deleteItem('sponsor',id); };
+window.changeSponsorStatus=async(id,stato)=>updateItem('sponsor',id,{stato});
+window.editSponsor=function(s){
+  editingId.sponsor=s.id;
+  document.getElementById('modal-sponsor-title').textContent='Modifica sponsor';
+  ['nome','settore','valore','referente'].forEach(f=>document.getElementById('sp-'+f).value=s[f]||'');
+  document.getElementById('sp-tier').value=s.tier||'main';
+  document.getElementById('sp-stato').value=s.stato||'da_contattare';
+  document.getElementById('sp-tel').value=s.telefono||'';
+  document.getElementById('sp-email').value=s.email||'';
+  document.getElementById('sp-note').value=s.note||'';
+  document.getElementById('modal-sponsor').classList.add('open');
+};
+function renderSponsor(list){
+  const el=document.getElementById('sponsor-list'); if(!el) return;
+  const tL={main:'Main Sponsor',tecnico:'Sponsor Tecnico',partner:'Partner Locale',istituzionale:'Istituzionale'};
+  const tC={main:'color:var(--amber);font-weight:600',tecnico:'color:var(--ink3)',partner:'color:var(--ink4)',istituzionale:'color:var(--blue)'};
+  const sL={da_contattare:'Da contattare',contattato:'Contattato',trattativa:'In trattativa',confermato:'✓ Confermato',declinato:'✗ Declinato'};
+  const sC={da_contattare:'var(--ink4)',contattato:'var(--blue)',trattativa:'var(--amber)',confermato:'var(--green)',declinato:'var(--red)'};
+  el.innerHTML=`<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Azienda</th><th class="hide-mobile">Referente</th><th class="hide-mobile">Contatti</th><th>Tier</th><th class="hide-mobile">Valore</th><th>Stato</th><th></th></tr></thead><tbody>
+  ${list.map(s=>`<tr>
+    <td><div style="font-weight:500">${s.nome}</div><div style="font-size:11px;color:var(--ink4)">${s.settore||''}</div></td>
+    <td class="hide-mobile" style="font-size:12px">${s.referente||'—'}</td>
+    <td class="hide-mobile" style="font-size:11px;line-height:1.8">${s.telefono?`<a href="tel:${s.telefono}" style="color:var(--blue);text-decoration:none">📞 ${s.telefono}</a><br>`:''}${s.email?`<a href="mailto:${s.email}" style="color:var(--blue);text-decoration:none">✉️ ${s.email}</a>`:''}</td>
+    <td style="${tC[s.tier]||''}">${tL[s.tier]||s.tier}</td>
+    <td class="hide-mobile" style="font-family:'DM Mono',monospace">${s.valore?s.valore+'€':'—'}</td>
+    <td><select class="mini-select" style="color:${sC[s.stato]||'var(--ink)'}" onchange="changeSponsorStatus('${s.id}',this.value)">
+      ${['da_contattare','contattato','trattativa','confermato','declinato'].map(v=>`<option value="${v}" ${s.stato===v?'selected':''}>${sL[v]}</option>`).join('')}
+    </select></td>
+    <td style="display:flex;gap:4px">
+      <button class="icon-btn" onclick='editSponsor(${JSON.stringify(s).replace(/'/g,"&#39;")})'>✏️</button>
+      <button class="icon-btn" onclick="deleteSponsor('${s.id}')">🗑️</button>
+    </td>
+  </tr>`).join('')}
+  </tbody></table></div>`;
+}
 
-window.saveSquadra = async function() {
+// ── SQUADRE ──
+window.saveSquadra=async function(){
   const nome=document.getElementById('sq-nome').value.trim(); if(!nome) return;
-  await addItem('squadre',{nome,tipo:document.getElementById('sq-tipo').value,zona:document.getElementById('sq-zona').value,contatto:document.getElementById('sq-contatto').value,stato:document.getElementById('sq-stato').value});
-  ['sq-nome','sq-zona','sq-contatto'].forEach(i=>document.getElementById(i).value='');
-  closeModal('modal-squadra');
+  const data={nome,tipo:document.getElementById('sq-tipo').value,zona:document.getElementById('sq-zona').value,referente:document.getElementById('sq-referente').value,telefono:document.getElementById('sq-tel').value,email:document.getElementById('sq-email').value,stato:document.getElementById('sq-stato').value,note:document.getElementById('sq-note').value};
+  if(editingId.squadra) await updateItem('squadre',editingId.squadra,data); else await addItem('squadre',data);
+  editingId.squadra=null; closeModal('modal-squadra'); clearFields(['sq-nome','sq-zona','sq-referente','sq-tel','sq-email','sq-note']);
 };
-window.deleteSquadra = async function(id) { if(confirm('Eliminare?')) await deleteItem('squadre',id); };
-window.changeSquadraStatus = async function(id,stato) { await updateItem('squadre',id,{stato}); };
+window.deleteSquadra=async id=>{ if(confirm('Eliminare?')) await deleteItem('squadre',id); };
+window.changeSquadraStatus=async(id,stato)=>updateItem('squadre',id,{stato});
+window.editSquadra=function(s){
+  editingId.squadra=s.id;
+  document.getElementById('modal-squadra-title').textContent='Modifica ente';
+  document.getElementById('sq-nome').value=s.nome||'';
+  document.getElementById('sq-tipo').value=s.tipo||'CRI';
+  document.getElementById('sq-zona').value=s.zona||'';
+  document.getElementById('sq-referente').value=s.referente||'';
+  document.getElementById('sq-tel').value=s.telefono||'';
+  document.getElementById('sq-email').value=s.email||'';
+  document.getElementById('sq-stato').value=s.stato||'da_invitare';
+  document.getElementById('sq-note').value=s.note||'';
+  document.getElementById('modal-squadra').classList.add('open');
+};
+function renderSquadre(list){
+  const el=document.getElementById('squadre-list'); if(!el) return;
+  const tC={CRI:'tag-gara',ANPAS:'tag-sicurezza',Misericordia:'tag-comunicazione',SUEM:'tag-logistica',Altro:'tag-sponsor'};
+  const sL={da_invitare:'Da invitare',invitato:'Invitato',confermato:'✓ Confermato',declinato:'✗ Declinato'};
+  const sC={da_invitare:'var(--ink4)',invitato:'var(--blue)',confermato:'var(--green)',declinato:'var(--red)'};
+  el.innerHTML=`<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Ente</th><th>Tipo</th><th class="hide-mobile">Zona</th><th class="hide-mobile">Contatti</th><th>Stato</th><th></th></tr></thead><tbody>
+  ${list.map(s=>`<tr>
+    <td style="font-weight:500">${s.nome}</td>
+    <td><span class="tag ${tC[s.tipo]||''}">${s.tipo}</span></td>
+    <td class="hide-mobile" style="color:var(--ink3)">${s.zona||'—'}</td>
+    <td class="hide-mobile" style="font-size:11px;line-height:1.8">${s.referente?`<div>${s.referente}</div>`:''}${s.telefono?`<a href="tel:${s.telefono}" style="color:var(--blue);text-decoration:none">📞 ${s.telefono}</a><br>`:''}${s.email?`<a href="mailto:${s.email}" style="color:var(--blue);text-decoration:none">✉️ ${s.email}</a>`:''}</td>
+    <td><select class="mini-select" style="color:${sC[s.stato]||'var(--ink)'}" onchange="changeSquadraStatus('${s.id}',this.value)">
+      ${['da_invitare','invitato','confermato','declinato'].map(v=>`<option value="${v}" ${s.stato===v?'selected':''}>${sL[v]}</option>`).join('')}
+    </select></td>
+    <td style="display:flex;gap:4px">
+      <button class="icon-btn" onclick='editSquadra(${JSON.stringify(s).replace(/'/g,"&#39;")})'>✏️</button>
+      <button class="icon-btn" onclick="deleteSquadra('${s.id}')">🗑️</button>
+    </td>
+  </tr>`).join('')}
+  </tbody></table></div>`;
+}
 
-function renderIdeeList(idee) {
+// ── PUBBLICAZIONI ──
+window.savePub=async function(){
+  const titolo=document.getElementById('pub-titolo').value.trim(); if(!titolo) return;
+  const data={titolo,data:document.getElementById('pub-data').value,canale:document.getElementById('pub-canale').value,tipo:document.getElementById('pub-tipo').value,testo:document.getElementById('pub-testo').value,stato:document.getElementById('pub-stato').value};
+  if(editingId.pub) await updateItem('pubblicazioni',editingId.pub,data); else await addItem('pubblicazioni',data);
+  editingId.pub=null; closeModal('modal-pub'); clearFields(['pub-titolo','pub-data','pub-testo']);
+};
+window.deletePub=async id=>{ if(confirm('Eliminare?')) await deleteItem('pubblicazioni',id); };
+window.changePubStatus=async(id,stato)=>updateItem('pubblicazioni',id,{stato});
+window.editPub=function(p){
+  editingId.pub=p.id;
+  document.getElementById('modal-pub-title').textContent='Modifica pubblicazione';
+  document.getElementById('pub-data').value=p.data||'';
+  document.getElementById('pub-canale').value=p.canale||'instagram';
+  document.getElementById('pub-tipo').value=p.tipo||'Post';
+  document.getElementById('pub-titolo').value=p.titolo||'';
+  document.getElementById('pub-testo').value=p.testo||'';
+  document.getElementById('pub-stato').value=p.stato||'bozza';
+  document.getElementById('modal-pub').classList.add('open');
+};
+function renderPubblicazioni(list){
+  const el=document.getElementById('comunicazione-list'); if(!el) return;
+  const sorted=[...list].sort((a,b)=>(a.data||'').localeCompare(b.data||''));
+  const cClass={instagram:'canale-instagram',facebook:'canale-facebook',linkedin:'canale-linkedin',stampa:'canale-stampa',email:'canale-email',sito:'canale-sito'};
+  const sC={bozza:'var(--ink4)',pronto:'var(--blue)',schedulato:'var(--amber)',pubblicato:'var(--green)'};
+  const sL={bozza:'Bozza',pronto:'Pronto',schedulato:'Schedulato',pubblicato:'Pubblicato'};
+  el.innerHTML=`<div class="pub-header hide-mobile"><span>Data</span><span>Canale</span><span>Tipo</span><span>Titolo / Testo</span><span>Stato</span><span></span></div>
+  <div class="pub-list">${sorted.map(p=>`
+    <div class="pub-item">
+      <span class="pub-date">${p.data?new Date(p.data+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'2-digit'}):'—'}</span>
+      <span class="pub-canale ${cClass[p.canale]||''}">${p.canale||'—'}</span>
+      <span class="pub-tipo">${p.tipo||'—'}</span>
+      <span class="pub-testo"><strong>${p.titolo}</strong>${p.testo?`<br><span style="color:var(--ink4);font-size:11px">${p.testo.substring(0,80)}${p.testo.length>80?'…':''}</span>`:''}</span>
+      <select class="mini-select" style="color:${sC[p.stato]||'var(--ink)'}" onchange="changePubStatus('${p.id}',this.value)">
+        ${['bozza','pronto','schedulato','pubblicato'].map(v=>`<option value="${v}" ${p.stato===v?'selected':''}>${sL[v]}</option>`).join('')}
+      </select>
+      <span style="display:flex;gap:4px">
+        <button class="icon-btn" onclick='editPub(${JSON.stringify(p).replace(/'/g,"&#39;")})'>✏️</button>
+        <button class="icon-btn" onclick="deletePub('${p.id}')">🗑️</button>
+      </span>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ── TEAM ──
+window.saveTeam=async function(){
+  const nome=document.getElementById('tm-nome').value.trim(); if(!nome) return;
+  const data={nome,ruolo:document.getElementById('tm-ruolo').value,area:document.getElementById('tm-area').value,telefono:document.getElementById('tm-tel').value,email:document.getElementById('tm-email').value,note:document.getElementById('tm-note').value};
+  if(editingId.team) await updateItem('team',editingId.team,data); else await addItem('team',data);
+  editingId.team=null; closeModal('modal-team'); clearFields(['tm-nome','tm-ruolo','tm-tel','tm-email','tm-note']);
+};
+window.deleteTeam=async id=>{ if(confirm('Eliminare membro?')) await deleteItem('team',id); };
+window.editTeam=function(t){
+  editingId.team=t.id;
+  document.getElementById('modal-team-title').textContent='Modifica membro';
+  document.getElementById('tm-nome').value=t.nome||'';
+  document.getElementById('tm-ruolo').value=t.ruolo||'';
+  document.getElementById('tm-area').value=t.area||'direzione';
+  document.getElementById('tm-tel').value=t.telefono||'';
+  document.getElementById('tm-email').value=t.email||'';
+  document.getElementById('tm-note').value=t.note||'';
+  document.getElementById('modal-team').classList.add('open');
+};
+function renderTeam(list){
+  const el=document.getElementById('team-list'); if(!el) return;
+  const areaC={direzione:'var(--red)',gara:'var(--blue)',sponsor:'var(--amber)',comunicazione:'var(--purple)',logistica:'var(--green)',sicurezza:'#555',admin:'var(--red-dark)'};
+  el.innerHTML=`<div class="team-grid">${list.map((t,i)=>`
+    <div class="team-card">
+      <div class="team-card-actions">
+        <button class="icon-btn" onclick='editTeam(${JSON.stringify(t).replace(/'/g,"&#39;")})'>✏️</button>
+        <button class="icon-btn" onclick="deleteTeam('${t.id}')">🗑️</button>
+      </div>
+      <div class="team-avatar" style="background:${areaC[t.area]||colors[i%colors.length]}">${(t.nome||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()}</div>
+      <div class="team-name">${t.nome}</div>
+      <div class="team-role">${t.ruolo||'—'}</div>
+      <div class="team-contact">
+        ${t.telefono?`<a href="tel:${t.telefono}">📞 ${t.telefono}</a><br>`:''}
+        ${t.email?`<a href="mailto:${t.email}">✉️ ${t.email}</a>`:''}
+        ${t.note?`<div style="margin-top:6px;font-size:10px;color:var(--ink4)">${t.note}</div>`:''}
+      </div>
+    </div>`).join('')}
+    <div class="add-card" onclick="openAddModal()" style="min-height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><div style="font-size:24px">+</div>Aggiungi membro</div>
+  </div>`;
+}
+
+// ── IDEE ──
+window.saveIdea=async function(){
+  const titolo=document.getElementById('idea-titolo').value.trim(); if(!titolo) return;
+  const data={titolo,categoria:document.getElementById('idea-cat').value,descrizione:document.getElementById('idea-desc').value,voti:0};
+  if(editingId.idea) await updateItem('idee',editingId.idea,data); else await addItem('idee',data);
+  editingId.idea=null; closeModal('modal-idea'); clearFields(['idea-titolo','idea-desc']);
+};
+window.voteIdea=async(id,v)=>updateItem('idee',id,{voti:v+1});
+window.deleteIdea=async id=>{ if(confirm('Eliminare?')) await deleteItem('idee',id); };
+window.editIdea=function(i){
+  editingId.idea=i.id;
+  document.getElementById('modal-idea-title').textContent='Modifica idea';
+  document.getElementById('idea-titolo').value=i.titolo||'';
+  document.getElementById('idea-cat').value=i.categoria||'gara';
+  document.getElementById('idea-desc').value=i.descrizione||'';
+  document.getElementById('modal-idea').classList.add('open');
+};
+function renderIdee(list){
   const el=document.getElementById('idee-list'); if(!el) return;
   const cC={gara:'var(--red)',comunicazione:'var(--purple)',esperienza:'var(--green)',business:'var(--amber)',formazione:'var(--blue)'};
-  const sorted=[...idee].sort((a,b)=>(b.voti||0)-(a.voti||0));
+  const sorted=[...list].sort((a,b)=>(b.voti||0)-(a.voti||0));
   el.innerHTML=`<div class="ideas-grid">${sorted.map(i=>`<div class="idea-card">
     <div class="idea-cat" style="color:${cC[i.categoria]||'var(--ink4)'}">${i.categoria}</div>
     <div class="idea-title">${i.titolo}</div>
     <div class="idea-desc">${i.descrizione||''}</div>
     <div class="idea-footer">
       <button class="icon-btn" onclick="voteIdea('${i.id}',${i.voti||0})" style="font-size:13px;color:var(--ink3)">▲ ${i.voti||0}</button>
+      <button class="icon-btn" onclick='editIdea(${JSON.stringify(i).replace(/'/g,"&#39;")})'>✏️</button>
       <button class="icon-btn" onclick="deleteIdea('${i.id}')" style="margin-left:auto">🗑️</button>
     </div>
   </div>`).join('')}
@@ -573,110 +915,50 @@ function renderIdeeList(idee) {
   </div>`;
 }
 
-function renderSponsorList(sps) {
-  const el=document.getElementById('sponsor-list'); if(!el) return;
-  const tL={main:'Main Sponsor',tecnico:'Sponsor Tecnico',partner:'Partner Locale',istituzionale:'Istituzionale'};
-  const tC={main:'color:var(--amber);font-weight:600',tecnico:'color:var(--ink3)',partner:'color:var(--ink4)',istituzionale:'color:var(--blue)'};
-  const sL={da_contattare:'Da contattare',contattato:'Contattato',trattativa:'In trattativa',confermato:'✓ Confermato',declinato:'✗ Declinato'};
-  const sC={da_contattare:'var(--ink4)',contattato:'var(--blue)',trattativa:'var(--amber)',confermato:'var(--green)',declinato:'var(--red)'};
-  el.innerHTML=`<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Azienda</th><th class="hide-mobile">Settore</th><th>Tier</th><th class="hide-mobile">Valore</th><th>Stato</th><th></th></tr></thead><tbody>
-  ${sps.map(s=>`<tr>
-    <td style="font-weight:500">${s.nome}</td>
-    <td class="hide-mobile" style="color:var(--ink3)">${s.settore||'—'}</td>
-    <td style="${tC[s.tier]||''}">${tL[s.tier]||s.tier}</td>
-    <td class="hide-mobile" style="font-family:'DM Mono',monospace">${s.valore||'—'}</td>
-    <td><select class="mini-select" style="color:${sC[s.stato]||'var(--ink)'}" onchange="changeSponsorStatus('${s.id}',this.value)">
-      ${['da_contattare','contattato','trattativa','confermato','declinato'].map(v=>`<option value="${v}" ${s.stato===v?'selected':''}>${sL[v]}</option>`).join('')}
-    </select></td>
-    <td><button class="icon-btn" onclick="deleteSponsor('${s.id}')">🗑️</button></td>
-  </tr>`).join('')}
-  </tbody></table></div>`;
+// ── BUDGET ──
+window.addBudgetRow=async function(tipo){
+  await addItem('budget',{tipo,voce:'Nuova voce',importo:0,note:''});
+};
+window.deleteBudgetRow=async id=>{ if(confirm('Eliminare?')) await deleteItem('budget',id); };
+async function updateBudgetField(id,field,value){
+  const data={}; data[field]=field==='importo'?parseFloat(value)||0:value;
+  await updateItem('budget',id,data);
 }
-
-function renderSquadreList(sqs) {
-  const el=document.getElementById('squadre-list'); if(!el) return;
-  const tC={CRI:'tag-gara',ANPAS:'tag-sicurezza',Misericordia:'tag-comunicazione',SUEM:'tag-logistica',Altro:'tag-sponsor'};
-  const sL={da_invitare:'Da invitare',invitato:'Invitato',confermato:'✓ Confermato',declinato:'✗ Declinato'};
-  const sC={da_invitare:'var(--ink4)',invitato:'var(--blue)',confermato:'var(--green)',declinato:'var(--red)'};
-  el.innerHTML=`<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Ente</th><th>Tipo</th><th class="hide-mobile">Zona</th><th class="hide-mobile">Contatto</th><th>Stato</th><th></th></tr></thead><tbody>
-  ${sqs.map(s=>`<tr>
-    <td style="font-weight:500">${s.nome}</td>
-    <td><span class="tag ${tC[s.tipo]||''}">${s.tipo}</span></td>
-    <td class="hide-mobile" style="color:var(--ink3)">${s.zona||'—'}</td>
-    <td class="hide-mobile" style="font-size:11px;color:var(--ink3)">${s.contatto||'—'}</td>
-    <td><select class="mini-select" style="color:${sC[s.stato]||'var(--ink)'}" onchange="changeSquadraStatus('${s.id}',this.value)">
-      ${['da_invitare','invitato','confermato','declinato'].map(v=>`<option value="${v}" ${s.stato===v?'selected':''}>${sL[v]}</option>`).join('')}
-    </select></td>
-    <td><button class="icon-btn" onclick="deleteSquadra('${s.id}')">🗑️</button></td>
-  </tr>`).join('')}
-  </tbody></table></div>`;
+function renderBudget(list){
+  const entrate=list.filter(r=>r.tipo==='entrate');
+  const uscite=list.filter(r=>r.tipo==='uscite');
+  const totE=entrate.reduce((s,r)=>s+(parseFloat(r.importo)||0),0);
+  const totU=uscite.reduce((s,r)=>s+(parseFloat(r.importo)||0),0);
+  const saldo=totE-totU;
+  document.getElementById('b-entrate').textContent=fmt(totE);
+  document.getElementById('b-uscite').textContent=fmt(totU);
+  document.getElementById('b-saldo').textContent=(saldo>=0?'+':'')+fmt(saldo);
+  document.getElementById('b-saldo').style.color=saldo>=0?'var(--green)':'var(--red)';
+  document.getElementById('b-totale').textContent=fmt(totE);
+  document.getElementById('b-saldo-bar').style.width=totE?Math.min(100,Math.round(totU/totE*100))+'%':'0%';
+  document.getElementById('b-saldo-bar').style.background=saldo>=0?'var(--green)':'var(--red)';
+  document.getElementById('tot-entrate').textContent=fmt(totE);
+  document.getElementById('tot-uscite').textContent=fmt(totU);
+  ['entrate','uscite'].forEach(tipo=>{
+    const tbody=document.getElementById('tbody-'+tipo);
+    if(!tbody) return;
+    tbody.innerHTML=list.filter(r=>r.tipo===tipo).map(r=>`<tr>
+      <td><input class="budget-input" value="${r.voce||''}" onblur="updateBudgetField('${r.id}','voce',this.value)" placeholder="Voce..."></td>
+      <td><input class="budget-input" type="number" value="${r.importo||0}" onblur="updateBudgetField('${r.id}','importo',this.value)" style="font-family:'DM Mono',monospace;text-align:right;width:90px"></td>
+      <td><input class="budget-input" value="${r.note||''}" onblur="updateBudgetField('${r.id}','note',this.value)" placeholder="Note..."></td>
+      <td><button class="icon-btn" onclick="deleteBudgetRow('${r.id}')">🗑️</button></td>
+    </tr>`).join('');
+  });
 }
+function fmt(n){ return new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',minimumFractionDigits:0}).format(n); }
 
-function renderLogistica() {
-  const el=document.getElementById('logistica-list'); if(!el) return;
-  const g=[
-    {cat:'VENUE & SPAZI',t:['Area parcheggio ambulanze (min. 10 posti)','Zona scenari (area chiusa al pubblico)','Area spettatori con visuale','Palco / area premiazione','Tenda attrezzature','Area hospitality sponsor','Servizi igienici adeguati']},
-    {cat:'OPERATIVO',t:['Catering venerdì sera (cena di gala)','Catering sabato e domenica','Pernottamento squadre (hotel)','Impianto audio PA commento live','Maxischermo area pubblica','Generatori elettrici backup','Segnaletica e recinzioni']},
-    {cat:'PERMESSI',t:['SCIA manifestazione pubblica','Autorizzazione SUEM / ASL','Assicurazione RC manifestazione','Contratto location firmato','Piano sicurezza approvato']}
-  ];
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">${g.map(x=>`<div><div class="section-title" style="font-size:11px;color:var(--ink4)">${x.cat}</div>${x.t.map(t=>`<div class="task-card" style="margin-bottom:6px"><div class="task-title" style="font-size:12px">${t}</div><div class="task-meta"><span class="tag" style="background:var(--paper2);color:var(--ink3)">Da fare</span></div></div>`).join('')}</div>`).join('')}</div>`;
-}
+// ── UTILS ──
+function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/"/g,'&quot;').replace(/'/g,"\\'"); }
+function clearFields(ids){ ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; }); }
 
-function renderComunicazione() {
-  const el=document.getElementById('comunicazione-list'); if(!el) return;
-  const g=[
-    {cat:'SOCIAL & WEB',t:['Profilo Instagram evento','Profilo Facebook evento','Pagina LinkedIn','Sito web / landing page','Newsletter']},
-    {cat:'PR & MEDIA',t:['Comunicato stampa lancio','Lista giornalisti','Media partner regionale','Accredito fotografi/videomaker','Rassegna stampa post-evento']},
-    {cat:'ISTITUZIONALE',t:['Patrocinio Regione Veneto','Patrocinio Comune','Invito consiglieri regionali','Contatto CRI Regionale','Contatto ANPAS Regionale']}
-  ];
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">${g.map(x=>`<div><div class="section-title" style="font-size:11px;color:var(--ink4)">${x.cat}</div>${x.t.map(t=>`<div class="task-card" style="margin-bottom:6px"><div class="task-title" style="font-size:12px">${t}</div><div class="task-meta"><span class="tag tag-comunicazione">comunicazione</span></div></div>`).join('')}</div>`).join('')}</div>`;
-}
-
-function renderTeam() {
-  const el=document.getElementById('team-list'); if(!el) return;
-  const r=[
-    {ini:'DG',nome:'Direttore Generale',ruolo:'Visione, decisioni, relazioni istituzionali',c:'var(--red)'},
-    {ini:'DT',nome:'Direttore Tecnico',ruolo:'Scenari, giudici, regolamento di gara',c:'var(--blue)'},
-    {ini:'RS',nome:'Resp. Sponsor',ruolo:'Dossier, trattative, contratti sponsor',c:'var(--amber)'},
-    {ini:'RC',nome:'Resp. Comunicazione',ruolo:'Social, stampa, media partner',c:'var(--purple)'},
-    {ini:'RL',nome:'Resp. Logistica',ruolo:'Location, catering, allestimento',c:'var(--green)'},
-    {ini:'RS',nome:'Resp. Sicurezza',ruolo:'Piano sicurezza, permessi, RSE',c:'var(--ink3)'},
-    {ini:'SE',nome:'Segreteria',ruolo:'Iscrizioni, comunicazioni, admin',c:'var(--red-dark)'},
-  ];
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px">${r.map(x=>`
-    <div style="background:var(--white);border:0.5px solid var(--border);border-radius:10px;padding:16px;text-align:center">
-      <div style="width:44px;height:44px;border-radius:50%;background:${x.c};display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin:0 auto 10px">${x.ini}</div>
-      <div style="font-size:13px;font-weight:500;margin-bottom:3px">${x.nome}</div>
-      <div style="font-size:11px;color:var(--ink4);line-height:1.4">${x.ruolo}</div>
-    </div>`).join('')}</div>`;
-}
-
-function renderScenari() {
-  const el=document.getElementById('scenari-list'); if(!el) return;
-  const s=[
-    {num:'SCN-01',diff:'Base',dc:'var(--green)',nome:'Trauma stradale multiplo',desc:'RTA con 2 feriti. ABCDE, immobilizzazione, gestione via aerea, comunicazione con centrale.',tags:['trauma','immobilizzazione','ABCDE']},
-    {num:'SCN-02',diff:'Medio',dc:'var(--amber)',nome:'Arresto cardiaco in luogo pubblico',desc:'OHCA con testimone. BLS avanzato, defibrillazione, gestione post-ROSC.',tags:['ALS','ROSC','defibrillazione']},
-    {num:'SCN-03',diff:'Avanzato',dc:'var(--red)',nome:'Politrauma con intrappolamento',desc:'Vittima intrappolata, instabilità emodinamica, pneumotorace, coordinamento VVF simulati.',tags:['intrappolamento','pneumotorace','coordinamento']},
-    {num:'SCN-04',diff:'Medio',dc:'var(--amber)',nome:'Crisi respiratoria acuta',desc:'SpO2 critica, broncospasmo severo, gestione farmacologica e ventilazione assistita.',tags:['broncospasmo','ventilazione','farmaci']},
-    {num:'SCN-05',diff:'Avanzato',dc:'var(--red)',nome:'Maxi-emergenza — FINALE',desc:'4 vittime a diversa gravità. Triage START, gestione simultanea, comunicazione intensa.',tags:['triage','maxi-emergenza','team']},
-  ];
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">${s.map(x=>`
-    <div style="background:var(--white);border:0.5px solid var(--border);border-radius:10px;overflow:hidden">
-      <div style="background:var(--ink);padding:10px 16px;display:flex;align-items:center;justify-content:space-between">
-        <span style="font-family:'DM Mono',monospace;font-size:10px;color:#555">${x.num}</span>
-        <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${x.dc}22;color:${x.dc}">${x.diff}</span>
-      </div>
-      <div style="padding:12px 16px 14px">
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px;line-height:1.3">${x.nome}</div>
-        <div style="font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:10px">${x.desc}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px">${x.tags.map(t=>`<span style="font-size:10px;padding:2px 7px;border-radius:10px;background:var(--paper2);color:var(--ink3)">${t}</span>`).join('')}</div>
-      </div>
-    </div>`).join('')}</div>`;
-}
-
-function initApp() {
-  renderLogistica(); renderComunicazione(); renderTeam(); renderScenari();
-  onSnapshot(collection(db,'tasks'), snap => {
+// ── INIT ──
+function initApp(){
+  onSnapshot(collection(db,'tasks'),snap=>{
     const tasks=snap.docs.map(d=>({id:d.id,...d.data()}));
     const cols={todo:[],doing:[],review:[],done:[]};
     tasks.forEach(t=>{ if(cols[t.stato]) cols[t.stato].push(t); });
@@ -694,29 +976,32 @@ function initApp() {
     const uel=document.getElementById('dashboard-urgent');
     if(uel) uel.innerHTML=urgent.length?`<div class="card-grid-2">${urgent.map(t=>renderTask(t,t.id)).join('')}</div>`:'<div class="empty-state"><div style="font-size:28px">✓</div><div style="margin-top:8px">Nessun task urgente</div></div>';
   });
-  onSnapshot(collection(db,'idee'), snap => {
+  onSnapshot(collection(db,'idee'),snap=>{
     const idee=snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderIdeeList(idee);
+    renderIdee(idee);
     document.getElementById('badge-idee').textContent=idee.length;
     document.getElementById('kpi-idee').textContent=idee.length;
     const cC={gara:'var(--red)',comunicazione:'var(--purple)',esperienza:'var(--green)',business:'var(--amber)',formazione:'var(--blue)'};
     const last=[...idee].slice(-3).reverse();
     const del=document.getElementById('dashboard-ideas');
-    if(del) del.innerHTML=last.length?`<div class="ideas-grid">${last.map(i=>`<div class="idea-card"><div class="idea-cat" style="color:${cC[i.categoria]||'var(--ink4)'}">${i.categoria}</div><div class="idea-title">${i.titolo}</div><div class="idea-desc">${i.descrizione||''}</div><div class="idea-footer"><button class="icon-btn" onclick="voteIdea('${i.id}',${i.voti||0})" style="font-size:13px">▲ ${i.voti||0}</button></div></div>`).join('')}</div>`:'<div class="empty-state">Nessuna idea ancora</div>';
+    if(del) del.innerHTML=last.length?`<div class="ideas-grid">${last.map(i=>`<div class="idea-card"><div class="idea-cat" style="color:${cC[i.categoria]||'var(--ink4)'}">${i.categoria}</div><div class="idea-title">${i.titolo}</div><div class="idea-desc">${i.descrizione||''}</div><div class="idea-footer"><button class="icon-btn" onclick="voteIdea('${i.id}',${i.voti||0})" style="font-size:13px">▲ ${i.voti||0}</button></div></div>`).join('')}</div>`:'<div class="empty-state">Nessuna idea</div>';
   });
-  onSnapshot(collection(db,'sponsor'), snap => {
+  onSnapshot(collection(db,'sponsor'),snap=>{
     const sps=snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderSponsorList(sps);
+    renderSponsor(sps);
     document.getElementById('badge-sponsor').textContent=sps.length;
     document.getElementById('kpi-sponsor').textContent=sps.length;
   });
-  onSnapshot(collection(db,'squadre'), snap => {
-    renderSquadreList(snap.docs.map(d=>({id:d.id,...d.data()})));
-  });
+  onSnapshot(collection(db,'squadre'),snap=>renderSquadre(snap.docs.map(d=>({id:d.id,...d.data()}))));
+  onSnapshot(collection(db,'scenari'),snap=>renderScenari(snap.docs.map(d=>({id:d.id,...d.data()}))));
+  onSnapshot(collection(db,'logistica'),snap=>renderLogistica(snap.docs.map(d=>({id:d.id,...d.data()}))));
+  onSnapshot(collection(db,'pubblicazioni'),snap=>renderPubblicazioni(snap.docs.map(d=>({id:d.id,...d.data()}))));
+  onSnapshot(collection(db,'team'),snap=>renderTeam(snap.docs.map(d=>({id:d.id,...d.data()}))));
+  onSnapshot(collection(db,'budget'),snap=>renderBudget(snap.docs.map(d=>({id:d.id,...d.data()}))));
   seedIfEmpty();
 }
 
-async function seedIfEmpty() {
+async function seedIfEmpty(){
   const t=await getDocs(collection(db,'tasks')); if(t.size>0) return;
   for(const x of [
     {titolo:'Definire regolamento tecnico completo',area:'gara',stato:'todo',priorita:'alta',note:''},
@@ -730,17 +1015,75 @@ async function seedIfEmpty() {
     {titolo:'Piano sicurezza evento',area:'sicurezza',stato:'todo',priorita:'alta',note:''},
     {titolo:'Nomina commissione giudicante',area:'gara',stato:'todo',priorita:'media',note:''},
   ]) await addItem('tasks',x);
-  const i=await getDocs(collection(db,'idee')); if(i.size===0)
-    for(const x of [{titolo:'Commento live con medico esperto',categoria:'gara',descrizione:'Un medico commenta in tempo reale le azioni delle squadre per il pubblico.',voti:3},{titolo:'Live streaming su YouTube/social',categoria:'comunicazione',descrizione:'Trasmettere le finali in diretta per amplificare la visibilità nazionale.',voti:2},{titolo:'Area prova il soccorso per bambini',categoria:'esperienza',descrizione:'BLS base su manichino per i bambini del pubblico. Forte impatto mediatico.',voti:4}])
-      await addItem('idee',x);
-  const s=await getDocs(collection(db,'sponsor')); if(s.size===0)
-    for(const x of [{nome:'Laerdal Medical',settore:'Dispositivi medici',tier:'main',valore:'8.000€',stato:'da_contattare',note:''},{nome:'Zoll Medical',settore:'Defibrillatori',tier:'main',valore:'8.000€',stato:'da_contattare',note:''},{nome:'Ferno Italia',settore:'Barelle e trasporto',tier:'tecnico',valore:'3.000€',stato:'da_contattare',note:''},{nome:'Regione Veneto',settore:'Istituzionale',tier:'istituzionale',valore:'4.000€',stato:'da_contattare',note:''}])
-      await addItem('sponsor',x);
+
+  const sc=await getDocs(collection(db,'scenari')); if(sc.size===0)
+    for(const x of [
+      {nome:'Trauma stradale multiplo',difficolta:'Base',tipo:'Eliminatoria',descrizione:'RTA con 2 feriti. ABCDE, immobilizzazione, gestione via aerea, comunicazione con centrale.',tags:['trauma','immobilizzazione','ABCDE'],note:'Valutare la corretta sequenza ABCDE e la comunicazione con la CO'},
+      {nome:'Arresto cardiaco in luogo pubblico',difficolta:'Medio',tipo:'Eliminatoria',descrizione:'OHCA con testimone. BLS avanzato, defibrillazione, gestione post-ROSC.',tags:['ALS','ROSC','defibrillazione','farmaci'],note:'Valutare timing defibrillazione e gestione farmaci'},
+      {nome:'Politrauma con intrappolamento',difficolta:'Avanzato',tipo:'Eliminatoria',descrizione:'Vittima intrappolata, instabilità emodinamica, pneumotorace, coordinamento VVF simulati.',tags:['intrappolamento','pneumotorace','coordinamento'],note:'Attenzione alla comunicazione inter-team'},
+      {nome:'Crisi respiratoria acuta',difficolta:'Medio',tipo:'Eliminatoria',descrizione:'SpO2 critica, broncospasmo severo, gestione farmacologica e ventilazione.',tags:['broncospasmo','ventilazione','farmaci'],note:''},
+      {nome:'Maxi-emergenza — FINALE',difficolta:'Avanzato',tipo:'Finale',descrizione:'4 vittime a diversa gravità. Triage START, gestione simultanea, comunicazione intensa.',tags:['triage','maxi-emergenza','team work'],note:'Scenario finale: valutazione triage e gestione risorse'},
+    ]) await addItem('scenari',x);
+
+  const lo=await getDocs(collection(db,'logistica')); if(lo.size===0)
+    for(const x of [
+      {descrizione:'Area parcheggio ambulanze (min. 10 posti)',categoria:'venue',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Zona scenari di gara (area chiusa al pubblico)',categoria:'venue',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Area spettatori con visuale sulle gare',categoria:'venue',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Palco / area cerimonia premiazione',categoria:'venue',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Catering venerdì sera (cena di gala)',categoria:'operativo',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Catering sabato e domenica',categoria:'operativo',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Pernottamento squadre (hotel convenzionato)',categoria:'operativo',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'SCIA per manifestazione pubblica',categoria:'permessi',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Autorizzazione SUEM / ASL',categoria:'permessi',stato:'da_fare',responsabile:'',note:''},
+      {descrizione:'Assicurazione RC manifestazione',categoria:'permessi',stato:'da_fare',responsabile:'',note:''},
+    ]) await addItem('logistica',x);
+
+  const sp=await getDocs(collection(db,'sponsor')); if(sp.size===0)
+    for(const x of [
+      {nome:'Laerdal Medical',settore:'Dispositivi medici',tier:'main',valore:'8000',stato:'da_contattare',referente:'',telefono:'',email:'',note:''},
+      {nome:'Zoll Medical',settore:'Defibrillatori',tier:'main',valore:'8000',stato:'da_contattare',referente:'',telefono:'',email:'',note:''},
+      {nome:'Ferno Italia',settore:'Barelle e trasporto',tier:'tecnico',valore:'3000',stato:'da_contattare',referente:'',telefono:'',email:'',note:''},
+      {nome:'Regione Veneto',settore:'Istituzionale',tier:'istituzionale',valore:'4000',stato:'da_contattare',referente:'',telefono:'',email:'',note:''},
+    ]) await addItem('sponsor',x);
+
   const sq=await getDocs(collection(db,'squadre')); if(sq.size===0)
-    for(const x of [{nome:'CRI Comitato Padova',tipo:'CRI',zona:'Padova, Veneto',contatto:'Da cercare',stato:'da_invitare'},{nome:'CRI Comitato Verona',tipo:'CRI',zona:'Verona, Veneto',contatto:'Da cercare',stato:'da_invitare'},{nome:'ANPAS Veneto',tipo:'ANPAS',zona:'Veneto',contatto:'Da cercare',stato:'da_invitare'},{nome:'Misericordia Vicenza',tipo:'Misericordia',zona:'Vicenza, Veneto',contatto:'Da cercare',stato:'da_invitare'},{nome:'SUEM 118 Venezia',tipo:'SUEM',zona:'Venezia, Veneto',contatto:'Da cercare',stato:'da_invitare'}])
-      await addItem('squadre',x);
+    for(const x of [
+      {nome:'CRI Comitato Padova',tipo:'CRI',zona:'Padova, Veneto',referente:'',telefono:'',email:'',stato:'da_invitare',note:''},
+      {nome:'CRI Comitato Verona',tipo:'CRI',zona:'Verona, Veneto',referente:'',telefono:'',email:'',stato:'da_invitare',note:''},
+      {nome:'ANPAS Veneto',tipo:'ANPAS',zona:'Veneto',referente:'',telefono:'',email:'',stato:'da_invitare',note:''},
+      {nome:'Misericordia Vicenza',tipo:'Misericordia',zona:'Vicenza, Veneto',referente:'',telefono:'',email:'',stato:'da_invitare',note:''},
+      {nome:'SUEM 118 Venezia',tipo:'SUEM',zona:'Venezia, Veneto',referente:'',telefono:'',email:'',stato:'da_invitare',note:''},
+    ]) await addItem('squadre',x);
+
+  const id=await getDocs(collection(db,'idee')); if(id.size===0)
+    for(const x of [
+      {titolo:'Commento live con medico esperto',categoria:'gara',descrizione:'Un medico commenta in tempo reale le azioni delle squadre per il pubblico.',voti:3},
+      {titolo:'Live streaming su YouTube/social',categoria:'comunicazione',descrizione:'Trasmettere le finali in diretta per amplificare la visibilità nazionale.',voti:2},
+      {titolo:'Area prova il soccorso per bambini',categoria:'esperienza',descrizione:'BLS base su manichino per i bambini del pubblico. Forte impatto mediatico.',voti:4},
+    ]) await addItem('idee',x);
+
+  const bu=await getDocs(collection(db,'budget')); if(bu.size===0){
+    for(const x of [
+      {tipo:'entrate',voce:'Main Sponsor (2×)',importo:16000,note:''},
+      {tipo:'entrate',voce:'Sponsor tecnici (4×)',importo:8000,note:''},
+      {tipo:'entrate',voce:'Partner locali (5×)',importo:4000,note:''},
+      {tipo:'entrate',voce:'Quote iscrizione squadre',importo:6000,note:'8 squadre × 750€'},
+      {tipo:'entrate',voce:'Contributi istituzionali',importo:4000,note:'Regione / Comune'},
+      {tipo:'entrate',voce:'Biglietti / gadget',importo:2000,note:''},
+      {tipo:'uscite',voce:'Location e allestimento',importo:9000,note:''},
+      {tipo:'uscite',voce:'Catering e vitto',importo:6000,note:''},
+      {tipo:'uscite',voce:'Staff e volontari',importo:4500,note:''},
+      {tipo:'uscite',voce:'Comunicazione e stampa',importo:4000,note:''},
+      {tipo:'uscite',voce:'Premi e trofei',importo:3500,note:''},
+      {tipo:'uscite',voce:'Materiali gara e scenari',importo:3000,note:''},
+      {tipo:'uscite',voce:'Assicurazioni e permessi',importo:2500,note:''},
+      {tipo:'uscite',voce:'Riprese video/foto',importo:2000,note:''},
+      {tipo:'uscite',voce:'Imprevisti (5%)',importo:2000,note:''},
+    ]) await addItem('budget',x);
+  }
 }
-window.initApp = initApp;
+window.initApp=initApp;
 </script>
 </body>
 </html>
