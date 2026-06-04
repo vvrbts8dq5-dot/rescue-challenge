@@ -1172,7 +1172,13 @@ function renderDocumenti(list){
   }
 
 
-  const te_=await getDocs(collection(db,'team')); if(te_.size===0){
+  // Team: seed if empty OR only has empty placeholder entries
+  const te_=await getDocs(collection(db,'team'));
+  const teamItems=te_.docs.map(d=>d.data());
+  const hasRealTeam=teamItems.some(t=>t.ruolo&&t.ruolo.length>2);
+  if(!hasRealTeam){
+    // Delete any existing empty entries first
+    for(const d of te_.docs) await deleteDoc(doc(db,'team',d.id));
     for(const x of [
       {nome:'Giovanni',ruolo:'Direttore Generale',area:'direzione',telefono:'',email:'',note:'Visione, decisioni strategiche, relazioni istituzionali'},
       {nome:'Da assegnare',ruolo:'Direttore Tecnico',area:'gara',telefono:'',email:'',note:'Scenari di gara, commissione giudicante, regolamento'},
