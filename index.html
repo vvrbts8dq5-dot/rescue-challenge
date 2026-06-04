@@ -107,6 +107,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 .data-table td{padding:10px 14px;border-bottom:.5px solid var(--border);vertical-align:middle;}
 .data-table tr:last-child td{border-bottom:none;}
 .data-table tr:hover td{background:var(--paper);}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1000;opacity:0;pointer-events:none;transition:opacity .2s;padding:16px;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal{background:var(--white);border-radius:14px;padding:28px 32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
@@ -125,6 +126,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 .icon-btn:hover{color:var(--red);}
 .loading{text-align:center;padding:40px;color:var(--ink4);font-size:13px;}
 .empty-state{text-align:center;padding:40px;color:var(--ink4);}
+
+/* DOCUMENTI */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.doc-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:16px 18px;position:relative;transition:all .15s;}
+.doc-card:hover{border-color:var(--ink4);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06);}
+.doc-type-icon{font-size:28px;margin-bottom:10px;}
+.doc-name{font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3;}
+.doc-desc{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:10px;}
+.doc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:10px;border-top:.5px solid var(--border);}
+.doc-card-actions{position:absolute;top:12px;right:12px;display:flex;gap:4px;opacity:0;transition:opacity .15s;}
+.doc-card:hover .doc-card-actions{opacity:1;}
+
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
 /* BUDGET EDITABLE */
@@ -224,7 +237,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
     <div class="form-group"><label style="font-size:12px;color:var(--ink3);margin-bottom:6px;font-weight:500;display:block">Password</label><input class="login-input" type="password" id="login-pass" placeholder="password" autocomplete="current-password"></div>
     <button class="login-btn" onclick="doLogin()">Accedi</button>
     <div class="login-error" id="login-error"></div>
-    <div class="login-hint">admin: <code>giovanni / rescue2025</code><br>team: <code>team / challenge2025</code></div>
+    
   </div>
 </div>
 
@@ -262,6 +275,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
       <div class="sidebar-section-label">Team & Idee</div>
       <button class="nav-item" onclick="showPage('team',this)"><span class="nav-icon">◍</span>Team</button>
       <button class="nav-item" onclick="showPage('idee',this)"><span class="nav-icon">✦</span>Hub Idee<span class="nav-badge" id="badge-idee">0</span></button>
+      <button class="nav-item" onclick="showPage('documenti',this)"><span class="nav-icon">📁</span>Documenti<span class="nav-badge" id="badge-docs">0</span></button>
     </div>
     <div class="sidebar-user">
       <div class="user-name" id="sidebar-username">—</div>
@@ -357,6 +371,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 
       <!-- TEAM -->
       <div class="page" id="page-team"><div id="team-list"><div class="loading">Caricamento...</div></div></div>
+
+      <!-- DOCUMENTI -->
+      <div class="page" id="page-documenti"><div id="documenti-list"><div class="loading">Caricamento...</div></div></div>
 
       <!-- IDEE -->
       <div class="page" id="page-idee"><div id="idee-list"><div class="loading">Caricamento...</div></div></div>
@@ -550,19 +567,19 @@ window.showPage=function(page,btn){
   document.getElementById('page-'+page).classList.add('active');
   if(btn) btn.classList.add('active');
   currentPage=page;
-  const titles={dashboard:'Dashboard',kanban:'Planner Kanban',timeline:'Timeline & Fasi',budget:'Budget',scenari:'Scenari di Gara',squadre:'Squadre & Enti',logistica:'Logistica',sponsor:'Sponsor DB',comunicazione:'Piano Pubblicazioni',team:'Team organizzativo',idee:'Hub Idee'};
+  const titles={dashboard:'Dashboard',kanban:'Planner Kanban',timeline:'Timeline & Fasi',budget:'Budget',scenari:'Scenari di Gara',squadre:'Squadre & Enti',logistica:'Logistica',sponsor:'Sponsor DB',comunicazione:'Piano Pubblicazioni',team:'Team organizzativo',idee:'Hub Idee',documenti:'Documenti'};
   document.getElementById('page-title').textContent=titles[page]||page;
-  const addPages=['kanban','sponsor','idee','squadre','scenari','logistica','comunicazione','team'];
+  const addPages=['kanban','sponsor','idee','squadre','scenari','logistica','comunicazione','team','documenti'];
   document.getElementById('topbar-add-btn').style.display=addPages.includes(page)?'flex':'none';
   closeSidebar();
 };
 
 window.openAddModal=function(){
-  const map={kanban:'modal-task',sponsor:'modal-sponsor',idee:'modal-idea',squadre:'modal-squadra',scenari:'modal-scenario',logistica:'modal-logistica',comunicazione:'modal-pub',team:'modal-team'};
+  const map={kanban:'modal-task',sponsor:'modal-sponsor',idee:'modal-idea',squadre:'modal-squadra',scenari:'modal-scenario',logistica:'modal-logistica',comunicazione:'modal-pub',team:'modal-team',documenti:'modal-documento'};
   const m=map[currentPage]||'modal-task';
   // reset editing
   const base=m.replace('modal-',''); editingId[base]=null;
-  const titleMap={task:'Nuovo task',sponsor:'Nuovo sponsor',idea:'Nuova idea',squadra:'Nuovo ente / squadra',scenario:'Nuovo scenario',logistica:'Nuovo elemento logistica',pub:'Nuova pubblicazione',team:'Nuovo membro team'};
+  const titleMap={task:'Nuovo task',sponsor:'Nuovo sponsor',idea:'Nuova idea',squadra:'Nuovo ente / squadra',scenario:'Nuovo scenario',logistica:'Nuovo elemento logistica',pub:'Nuova pubblicazione',team:'Nuovo membro team',documento:'Nuovo documento'};
   const tid=document.getElementById('modal-'+base+'-title')||document.getElementById('modal-task-title');
   if(tid) tid.textContent=titleMap[base]||'Nuovo';
   document.getElementById(m).classList.add('open');
@@ -733,7 +750,7 @@ function renderSponsor(list){
   const tC={main:'color:var(--amber);font-weight:600',tecnico:'color:var(--ink3)',partner:'color:var(--ink4)',istituzionale:'color:var(--blue)'};
   const sL={da_contattare:'Da contattare',contattato:'Contattato',trattativa:'In trattativa',confermato:'✓ Confermato',declinato:'✗ Declinato'};
   const sC={da_contattare:'var(--ink4)',contattato:'var(--blue)',trattativa:'var(--amber)',confermato:'var(--green)',declinato:'var(--red)'};
-  el.innerHTML=`<div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Azienda</th><th class="hide-mobile">Referente</th><th class="hide-mobile">Contatti</th><th>Tier</th><th class="hide-mobile">Valore</th><th>Stato</th><th></th></tr></thead><tbody>
+  el.innerHTML=`<div class="table-wrap"><table class="data-table" style="min-width:600px"><thead><tr><th>Azienda</th><th class="hide-mobile">Referente</th><th class="hide-mobile">Contatti</th><th>Tier</th><th class="hide-mobile">Valore</th><th>Stato</th><th></th></tr></thead><tbody>
   ${list.map(s=>`<tr>
     <td><div style="font-weight:500">${s.nome}</div><div style="font-size:11px;color:var(--ink4)">${s.settore||''}</div></td>
     <td class="hide-mobile" style="font-size:12px">${s.referente||'—'}</td>
@@ -1083,7 +1100,126 @@ async function seedIfEmpty(){
     ]) await addItem('budget',x);
   }
 }
+
+// ── DOCUMENTI ──
+window.saveDocumento=async function(){
+  const nome=document.getElementById('doc-nome').value.trim(); if(!nome) return;
+  const data={nome,tipo:document.getElementById('doc-tipo').value,stato:document.getElementById('doc-stato').value,link:document.getElementById('doc-link').value,descrizione:document.getElementById('doc-desc').value,responsabile:document.getElementById('doc-resp').value,data_doc:document.getElementById('doc-data').value};
+  if(editingId.documento) await updateItem('documenti',editingId.documento,data); else await addItem('documenti',data);
+  editingId.documento=null; closeModal('modal-documento'); clearFields(['doc-nome','doc-link','doc-desc','doc-resp','doc-data']);
+};
+window.deleteDocumento=async id=>{ if(confirm('Eliminare documento?')) await deleteItem('documenti',id); };
+window.editDocumento=function(d){
+  editingId.documento=d.id;
+  document.getElementById('modal-doc-title').textContent='Modifica documento';
+  document.getElementById('doc-nome').value=d.nome||'';
+  document.getElementById('doc-tipo').value=d.tipo||'altro';
+  document.getElementById('doc-stato').value=d.stato||'bozza';
+  document.getElementById('doc-link').value=d.link||'';
+  document.getElementById('doc-desc').value=d.descrizione||'';
+  document.getElementById('doc-resp').value=d.responsabile||'';
+  document.getElementById('doc-data').value=d.data_doc||'';
+  document.getElementById('modal-documento').classList.add('open');
+};
+function renderDocumenti(list){
+  const el=document.getElementById('documenti-list'); if(!el) return;
+  document.getElementById('badge-docs').textContent=list.length;
+  const tipoIcon={regolamento:'📋',contratto:'✍️',dossier:'💼',modulo:'📝',presentazione:'📊',budget:'💰',comunicazione:'📣',sicurezza:'🛡️',altro:'📄'};
+  const statoC={bozza:'var(--ink4)',in_revisione:'var(--amber)',approvato:'var(--green)',archiviato:'var(--ink4)'};
+  const statoL={bozza:'Bozza',in_revisione:'In revisione',approvato:'✓ Approvato',archiviato:'Archiviato'};
+  const tipoC={regolamento:'tag-gara',contratto:'tag-sponsor',dossier:'tag-sponsor',modulo:'tag-logistica',presentazione:'tag-comunicazione',budget:'tag-sponsor',comunicazione:'tag-comunicazione',sicurezza:'tag-sicurezza',altro:'tag-logistica'};
+  // group by tipo
+  const groups={};
+  list.forEach(d=>{ if(!groups[d.tipo]) groups[d.tipo]=[];  groups[d.tipo].push(d); });
+  const tipoLabel={regolamento:'Regolamenti',contratto:'Contratti',dossier:'Dossier',modulo:'Moduli & Form',presentazione:'Presentazioni',budget:'Budget & Finanza',comunicazione:'Comunicazione',sicurezza:'Sicurezza',altro:'Altro'};
+  el.innerHTML=Object.entries(groups).map(([tipo,docs])=>`
+    <div style="margin-bottom:28px">
+      <div class="section-title">${tipoIcon[tipo]||'📄'} ${tipoLabel[tipo]||tipo}</div>
+      <div class="doc-grid">${docs.map(d=>`
+        <div class="doc-card">
+          <div class="doc-card-actions">
+            <button class="icon-btn" onclick='editDocumento(${JSON.stringify(d).replace(/'/g,"&#39;")})'>✏️</button>
+            <button class="icon-btn" onclick="deleteDocumento('${d.id}')">🗑️</button>
+          </div>
+          <div class="doc-type-icon">${tipoIcon[d.tipo]||'📄'}</div>
+          <div class="doc-name">${d.nome}</div>
+          <div class="doc-desc">${d.descrizione||'Nessuna descrizione'}</div>
+          <div class="doc-meta">
+            <span class="tag ${tipoC[d.tipo]||''}" style="font-size:10px">${d.tipo}</span>
+            <span style="font-size:10px;color:${statoC[d.stato]||'var(--ink4)'}">● ${statoL[d.stato]||d.stato}</span>
+            ${d.responsabile?`<span style="font-size:11px;color:var(--ink4)">👤 ${d.responsabile}</span>`:''}
+            ${d.link?`<a href="${d.link}" target="_blank" rel="noopener" style="margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--blue);text-decoration:none;padding:4px 10px;border:.5px solid var(--blue-light);border-radius:6px;background:var(--blue-light)">🔗 Apri</a>`:'<span style="font-size:11px;color:var(--ink4);margin-left:auto">Nessun link</span>'}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('')+
+    `<button class="add-card" onclick="openAddModal()" style="margin-top:8px">＋ Aggiungi documento</button>`;
+}
+
+
+
+  onSnapshot(collection(db,'documenti'),snap=>renderDocumenti(snap.docs.map(d=>({id:d.id,...d.data()}))));
+
+
+  const do_=await getDocs(collection(db,'documenti')); if(do_.size===0){
+    for(const x of [
+      {nome:'Regolamento tecnico di gara',tipo:'regolamento',stato:'bozza',link:'',descrizione:'Regolamento ufficiale con scenari, criteri di valutazione e punteggi',responsabile:'Direttore Tecnico',data_doc:''},
+      {nome:'Dossier sponsor',tipo:'dossier',stato:'bozza',link:'',descrizione:'Pacchetti sponsor con benefit e tariffe per i partner',responsabile:'Resp. Sponsor',data_doc:''},
+      {nome:'Business plan prima edizione',tipo:'budget',stato:'bozza',link:'',descrizione:'Budget, proiezioni e piano di crescita pluriennale',responsabile:'Direttore Generale',data_doc:''},
+      {nome:'Scheda iscrizione squadre',tipo:'modulo',stato:'bozza',link:'',descrizione:'Modulo ufficiale per la registrazione degli equipaggi partecipanti',responsabile:'Segreteria',data_doc:''},
+      {nome:'Piano di sicurezza evento',tipo:'sicurezza',stato:'bozza',link:'',descrizione:'Procedure di emergenza, evacuazione e presidio medico',responsabile:'Resp. Sicurezza',data_doc:''},
+    ]) await addItem('documenti',x);
+  }
+
+
+  const te_=await getDocs(collection(db,'team')); if(te_.size===0){
+    for(const x of [
+      {nome:'Giovanni',ruolo:'Direttore Generale',area:'direzione',telefono:'',email:'',note:'Visione, decisioni strategiche, relazioni istituzionali'},
+      {nome:'Da assegnare',ruolo:'Direttore Tecnico',area:'gara',telefono:'',email:'',note:'Scenari di gara, commissione giudicante, regolamento'},
+      {nome:'Da assegnare',ruolo:'Responsabile Sponsor',area:'sponsor',telefono:'',email:'',note:'Dossier sponsor, trattative, contratti e partnership'},
+      {nome:'Da assegnare',ruolo:'Responsabile Comunicazione',area:'comunicazione',telefono:'',email:'',note:'Social media, stampa, media partner, identità visiva'},
+      {nome:'Da assegnare',ruolo:'Responsabile Logistica',area:'logistica',telefono:'',email:'',note:'Location, catering, allestimento, viabilità'},
+      {nome:'Da assegnare',ruolo:'Responsabile Sicurezza',area:'sicurezza',telefono:'',email:'',note:'Piano sicurezza, permessi, RSE, figuranti'},
+      {nome:'Da assegnare',ruolo:'Segreteria',area:'admin',telefono:'',email:'',note:'Iscrizioni squadre, comunicazioni, gestione admin'},
+    ]) await addItem('team',x);
+  }
+
 window.initApp=initApp;
 </script>
+
+<!-- MODAL DOCUMENTO -->
+<div class="modal-overlay" id="modal-documento">
+  <div class="modal">
+    <div class="modal-title" id="modal-doc-title">Nuovo documento</div>
+    <div class="form-group"><label class="form-label">Nome documento</label><input class="form-input" id="doc-nome" placeholder="Es. Regolamento tecnico di gara..."></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="doc-tipo">
+        <option value="regolamento">Regolamento</option>
+        <option value="contratto">Contratto</option>
+        <option value="dossier">Dossier</option>
+        <option value="modulo">Modulo / Form</option>
+        <option value="presentazione">Presentazione</option>
+        <option value="budget">Budget / Finanza</option>
+        <option value="comunicazione">Comunicazione</option>
+        <option value="sicurezza">Sicurezza</option>
+        <option value="altro">Altro</option>
+      </select></div>
+      <div class="form-group"><label class="form-label">Stato</label><select class="form-select" id="doc-stato">
+        <option value="bozza">Bozza</option>
+        <option value="in_revisione">In revisione</option>
+        <option value="approvato">Approvato</option>
+        <option value="archiviato">Archiviato</option>
+      </select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Link (Google Drive, Dropbox, ecc.)</label><input class="form-input" id="doc-link" placeholder="https://drive.google.com/..."></div>
+    <div class="form-group"><label class="form-label">Descrizione</label><textarea class="form-textarea" id="doc-desc" placeholder="Breve descrizione del documento..."></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Responsabile</label><input class="form-input" id="doc-resp" placeholder="Chi lo gestisce..."></div>
+      <div class="form-group"><label class="form-label">Data</label><input class="form-input" type="date" id="doc-data"></div>
+    </div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('modal-documento')">Annulla</button><button class="btn btn-red" onclick="saveDocumento()">Salva</button></div>
+  </div>
+</div>
+
 </body>
 </html>
