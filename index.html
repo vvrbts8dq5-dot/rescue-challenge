@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Rescue Challenge — Project Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
@@ -15,10 +15,10 @@
   --sidebar-w:260px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden;min-height:100vh;min-height:-webkit-fill-available;}
 
 /* LOGIN */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px;}
+#login-screen{min-height:100vh;min-height:-webkit-fill-available;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:20px;}
 .login-box{background:var(--white);border-radius:16px;padding:40px 44px;width:100%;max-width:380px;box-shadow:0 24px 80px rgba(0,0,0,0.4);}
 .login-logo-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--red);text-transform:uppercase;margin-bottom:6px;}
 .login-logo{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--ink);margin-bottom:28px;line-height:1.1;}
@@ -30,7 +30,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 .login-hint{margin-top:16px;font-size:11px;color:var(--ink4);text-align:center;line-height:1.8;}
 
 /* APP */
-#app{display:none;height:100vh;overflow:hidden;}
+#app{display:none;height:100vh;height:-webkit-fill-available;overflow:hidden;}
 #app.visible{display:flex;flex-direction:row;}
 #sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;}
 
@@ -140,6 +140,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
+/* TOUCH TARGETS MOBILE */
+@media(hover:none){
+  .nav-item{padding:11px 10px;} /* più alto per il dito */
+  .topbar-menu-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
+  .icon-btn{padding:6px 8px;} /* più grande da toccare */
+  .mini-select{padding:4px 8px;font-size:12px;}
+}
+
 /* BUDGET EDITABLE */
 .budget-split{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .budget-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:10px;overflow:hidden;border:.5px solid var(--border);}
@@ -196,11 +204,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
 
 /* RESPONSIVE */
 @media(max-width:900px){
-  :root{--sidebar-w:240px;}
-  .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%);}
+  :root{--sidebar-w:260px;}
+
+  /* Login: sempre centrato, non risente del layout app */
+  #login-screen{position:fixed;inset:0;z-index:500;min-height:100%;min-height:-webkit-fill-available;}
+
+  /* App: column ma SOLO la zona main (sidebar è fixed) */
+  #app.visible{flex-direction:row;} /* manteniamo row, la sidebar è fixed */
+
+  /* Sidebar: sempre fixed su mobile, fuori dal flusso */
+  .sidebar{
+    position:fixed;top:0;left:0;
+    height:100vh;height:-webkit-fill-available;
+    transform:translateX(-100%);
+    z-index:200;
+    box-shadow:4px 0 20px rgba(0,0,0,.3);
+  }
   .sidebar.open{transform:translateX(0);}
   #sidebar-overlay.show{display:block;}
-  #app.visible{flex-direction:column;}
+
+  /* Main occupa tutto lo schermo, sidebar non prende spazio */
+  .main{width:100%;min-width:0;}
+
   .topbar-menu-btn{display:flex;}
   .topbar-tag{display:none;}
   .kpi-grid{grid-template-columns:repeat(2,1fr);}
@@ -212,18 +237,30 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);o
   .pub-header{display:none;}
 }
 @media(max-width:600px){
-  .content{padding:14px;}
+  /* Fix 100vh su Safari iOS (esclude la barra URL) */
+  #app{height:100vh;height:-webkit-fill-available;}
+  #app.visible{height:100vh;height:-webkit-fill-available;}
+
+  .content{padding:14px;-webkit-overflow-scrolling:touch;}
   .topbar{padding:0 14px;height:52px;}
   .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
   .kpi-val{font-size:20px;}
   .kanban{grid-template-columns:1fr;}
   .ideas-grid{grid-template-columns:1fr;}
-  .modal{padding:20px 18px;}
+  .modal{padding:20px 18px;max-height:85vh;max-height:85dvh;}
   .hide-mobile{display:none;}
   .team-grid{grid-template-columns:repeat(2,1fr);}
   .pub-item{grid-template-columns:1fr;gap:6px;}
   .items-grid{grid-template-columns:1fr;}
   .form-row{grid-template-columns:1fr;}
+
+  /* Login box più compatto su schermi piccoli */
+  .login-box{padding:28px 24px;}
+  .login-logo{font-size:20px;}
+
+  /* Tabelle: scroll orizzontale */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .data-table{min-width:420px;}
 }
 </style>
 </head>
